@@ -560,7 +560,7 @@ function Index() {
         .request({ method: "eth_requestAccounts" })
         .then((accounts) => {
           setAddress(accounts[0]);
-          let w3 = new Web3(window.web3.currentProvider);
+          let w3 = new Web3(ethereum);
           setWeb3(w3);
           let c = new w3.eth.Contract(abi, contractAddress);
           setContract(c);
@@ -650,7 +650,7 @@ function Index() {
 
   function claim() {
     setIsClaiming(true);
-    let _price = web3.utils.toWei("0.666");
+    let _price = web3.utils.toWei("1");
 
     contract.methods
       .claim()
@@ -702,29 +702,57 @@ function Index() {
               <Image src='/assets/munk1.gif' alt='munk' width='128' height='128' />
               <Image src='/assets/munk2.gif' alt='munk' width='128' height='128' />
               <Image src='/assets/munk3.gif' alt='munk' width='128' height='128' />
-              <Image src='/assets/munk4.gif' alt='munk' width='128' height='128' />
             </div>
 
-            <div style={{ flex: 2 }}>
+            <div style={{ flex: 3 }}>
 
-              Maybe there will be <div className='colorGradient'>66.666</div> Munks.
+              This is the first collection created inside the <div className='colorGradient'>MUNKVERSE.</div>
               <br />
               <br />
 
+              What is the <div className='colorGradient'>MUNKVERSE</div>?
+              <br />
+
+              It's just where all Munks live.
+              <br />
+              Munk is a character created by 16 years old's mind around 2008.
+              <br />
+
+              I've never stopped drawing this same character.
+              <br />
+              Now I think it's perfect for NFTs.
+              <br />
+              I hope you stick around to see more.
+              
+              <br />
+              <br />
+
+              This would not be possible without the amazing project:
+              <br />
+              <div className='colorGradient'>Fantom Chess.</div>
+              <br />
+              
+              Please, check it at <a href='https://www.fantomchess.com' className='mr-10' target='_blank'><div className='colorGradient'>fantomchess.com</div></a>
+              <br />
+
+              <br />
+              <br />
+
+              There are <div className='colorGradient'>10.000</div> Munks ready to be claim.
+              <br />
+
+              <br />
+
 
               <br />
               <br />
 
               <br />
 
-              Price: <div className='colorGradient'>0.666 FTM</div> each
+              Price: <div className='colorGradient'>1 FTM</div> each
 
               <br />
               <br />
-
-              <a href='https://discord.gg/DISC' className='mr-10' target='_blank'>
-                <Image src='/assets/discord.svg' alt='munk' width='20' height='20' />
-              </a>
 
               <a href='https://twitter.com/munks_nft' target='_blank' className='mr-10'>
                 <Image src='/assets/twitter.svg' alt='munk' width='20' height='20' />
@@ -732,10 +760,6 @@ function Index() {
 
               <a href='https://ftmscan.com/address/ADRESS' className='mr-10' target='_blank'>
                 <Image src='/assets/fantom.svg' alt='munk' width='20' height='20' />
-              </a>
-
-              <a href='https://paintswap.finance/marketplace/collections/ADRESS' target='_blank'>
-                <Image src='/assets/paint.png' alt='munk' width='20' height='20' />
               </a>
             </div>
           </div>
