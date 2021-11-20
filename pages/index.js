@@ -12,6 +12,7 @@ function Index() {
   const [supply, setSupply] = useState(0);
   const [isClaiming, setIsClaiming] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [tokenTest, setTokenTest] = useState(null);
 
 
   let abi = [
@@ -561,6 +562,7 @@ function Index() {
         .then((accounts) => {
           setAddress(accounts[0]);
           let w3 = new Web3(ethereum);
+          //let w3 = new Web3(window.web3.currentProvider);
           setWeb3(w3);
           let c = new w3.eth.Contract(abi, contractAddress);
           setContract(c);
@@ -582,7 +584,7 @@ function Index() {
               setContract(null);
               Swal.fire({
                 title: 'Error!',
-                html: 'Check if you are using the Fantom Network1',
+                html: 'Check if you are using the Fantom Network',
                 icon: 'error',
                 confirmButtonText: 'Ok'
               })
@@ -610,7 +612,7 @@ function Index() {
           setIsReady(false);
           Swal.fire({
             title: 'Error!',
-            html: 'Check if you are using the Fantom Network2',
+            html: 'Check if you are using the Fantom Network',
             icon: 'error',
             confirmButtonText: 'Ok'
           })
@@ -629,6 +631,8 @@ function Index() {
       .call();
 
     setSupply(totalSupply);
+
+
 
     contract.methods
       .maxMintable()
