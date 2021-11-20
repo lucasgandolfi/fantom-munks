@@ -561,8 +561,8 @@ function Index() {
         .request({ method: "eth_requestAccounts" })
         .then((accounts) => {
           setAddress(accounts[0]);
-          let w3 = new Web3(ethereum);
-          //let w3 = new Web3(window.web3.currentProvider);
+          //let w3 = new Web3(ethereum);
+          let w3 = new Web3(window.web3.currentProvider);
           setWeb3(w3);
           let c = new w3.eth.Contract(abi, contractAddress);
           setContract(c);
@@ -710,6 +710,10 @@ function Index() {
 
             <div style={{ flex: 3 }}>
 
+              <br />
+              THIS IS NOT REALEASED. DO NOT MINT.
+              <br />
+
               This is the first collection created inside the <div className='colorGradient'>MUNKVERSE.</div>
               <br />
               <br />
@@ -773,7 +777,7 @@ function Index() {
           {isReady && <div>Available {maxMintable - supply}/{maxMintable}</div>}
 
           {isReady && <button className='button' style={{marginLeft: 'auto', marginRight: 'auto', marginTop: 20}} onClick={handleClaim}>
-            { isClaiming ? 'loading...' : 'Claim (0.666 FTM)' }
+            { isClaiming ? 'loading...' : 'Claim (1 FTM)' }
           </button>}
 
           {!isReady && <div className='colorGradient'><br></br>Connect your wallet to claim</div>}
