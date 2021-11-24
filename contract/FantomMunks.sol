@@ -7,17 +7,18 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract FantomChess is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract FantomMunks is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     using Strings for uint256;
 
     Counters.Counter private _tokenIdCounter;
     address payable public depositAddress = payable(0xFc3778f4b877B25A2A6B501a6Bd987bB6B43F7e0);
     uint256 public maxMintable = 555;
+    uint256 public mintPrice = 1 ether;
     string private _baseUrl;
-      string public baseExtension = ".json";
+    string public baseExtension = ".json";
 
-    constructor(string memory baseUrl) ERC721("FantomChess", "CHESS") {
+    constructor(string memory baseUrl) ERC721("FantomMunks", "MNK") {
         _baseUrl = baseUrl;
     }
 
@@ -25,18 +26,23 @@ contract FantomChess is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return _baseUrl;
     }
 
-    function claim() public payable {
-        uint256 id = _tokenIdCounter.current();
-        uint256 price = 20 ether;
+    function claim(uint256 quantity) public payable {
+        require(quantity > 0, "Invalid amount");
+        require((_tokenIdCounter.current() + quantity) < (maxMintable), "No more Munks are available");
+        
+        uint256 price = mintPrice * quantity;
 
-        require(msg.value == price, "Invalid amount");
-        require(id < (maxMintable), "No more Chess Games are available");
-
+        require(msg.value >= price, "Invalid amount");
+        
         // transfer amount to owner
         depositAddress.transfer(price);
 
-        _safeMint(msg.sender, id);
-        _tokenIdCounter.increment();
+        for (uint256 i = 0; i < quantity; i++) {
+            uint256 id = _tokenIdCounter.current();
+            _safeMint(msg.sender, id);
+
+            _tokenIdCounter.increment();
+        }
     }
 
     function setTokenURI(uint256 tokenId, string memory newURI) public onlyOwner {
