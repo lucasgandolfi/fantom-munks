@@ -113,7 +113,9 @@ function Index() {
 
         const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
 
-        toast.success("Congratulations! Now you Munk!", { theme: "colored" });
+        toast.success("Congratulations! Now you have a Munk!", {
+          theme: "colored",
+        });
       });
   }
 
