@@ -98,7 +98,6 @@ function Index() {
     contract.methods
       .claim(1)
       .send({
-        gasLimit: "285000",
         to: contractAddress,
         from: address,
         value: _price,
