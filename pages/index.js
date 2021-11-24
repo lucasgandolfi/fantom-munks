@@ -1,7 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
-let Web3 = require("web3");
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+
+import Web3 from "web3";
 import FantomMunksAbi from "../contract/abis/FantomMunks.json";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
@@ -47,7 +51,9 @@ function Index() {
             setSupply(0);
             setMaxMintable(0);
             setContract(null);
-            // TODO add error message if you are using fantom network
+            toast.error("Check if you are using Fantom Network", {
+              theme: "colored",
+            });
           });
 
         c.methods
@@ -60,7 +66,9 @@ function Index() {
       })
       .catch((err) => {
         setIsReady(false);
-        // TODO add error message if you are using fantom network
+        toast.error("Check if you are using Fantom Network", {
+          theme: "colored",
+        });
       });
   }
 
@@ -106,12 +114,12 @@ function Index() {
 
         const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
 
-        // TODO add success message notification
+        toast.success("Congratulations! Now you Munk!", { theme: "colored" });
       });
   }
 
   return (
-    <Fragment>
+    <>
       <div className="geeks"></div>
       <div className="header">
         <div className="tittle colorGradient">
@@ -246,7 +254,8 @@ function Index() {
           )}
         </div>
       </div>
-    </Fragment>
+      <ToastContainer />
+    </>
   );
 }
 
