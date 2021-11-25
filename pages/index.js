@@ -132,9 +132,7 @@ function Index() {
     <>
       <div className="geeks"></div>
       <div className="header">
-        <div className="tittle colorGradient">
-          FANTOM MUNKS - NFT Collection
-        </div>
+        <div className="tittle colorGradient">FANTOM MUNKS</div>
 
         <button className="button" onClick={connectWallet}>
           {isReady
@@ -149,31 +147,16 @@ function Index() {
       <div id="app">
         <div className="form-container">
           <div className="content-container">
-            <div style={{ flex: 1 }} className="image-frame">
+            <div className="image-frame">
               <Image
                 src="/assets/munk1.gif"
                 alt="munk"
-                width="128"
-                height="128"
-              />
-              <Image
-                src="/assets/munk2.gif"
-                alt="munk"
-                width="128"
-                height="128"
-              />
-              <Image
-                src="/assets/munk3.gif"
-                alt="munk"
-                width="128"
-                height="128"
+                width="350"
+                height="350"
               />
             </div>
 
-            <div style={{ flex: 3 }}>
-              <br />
-              THIS IS NOT REALEASED. DO NOT MINT.
-              <br />
+            <div>
               This is the first collection created inside the{" "}
               <div className="colorGradient">MUNKVERSE.</div>
               <br />
