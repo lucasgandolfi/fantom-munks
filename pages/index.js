@@ -95,28 +95,37 @@ function Index() {
     setIsClaiming(true);
     let _price = web3.utils.toWei("1");
 
-    contract.methods
-      .claim(1)
-      .send({
-        to: contractAddress,
-        from: address,
-        value: _price,
-      })
-      .once("error", (err) => {
-        console.log(err);
-        setIsClaiming(false);
-      })
-      .then((receipt) => {
-        console.log(receipt);
-        setIsClaiming(false);
-        loadData();
+    const claimPromise = new Promise((resolve, reject) => {
+      contract.methods
+        .claim(1)
+        .send({
+          to: contractAddress,
+          from: address,
+          value: _price,
+        })
+        .once("error", (err) => {
+          console.log(err);
+          setIsClaiming(false);
+          reject();
+        })
+        .then((receipt) => {
+          console.log(receipt);
+          setIsClaiming(false);
+          loadData();
 
-        const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
+          const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
 
-        toast.success("Congratulations! Now you have a Munk!", {
-          theme: "colored",
+          resolve(link);
         });
-      });
+    });
+
+    toast.promise(claimPromise, {
+      pending: "Claiming...",
+      success: {
+        render: (link) => `Claimed!`,
+      },
+      error: "Something went wrong... Try again!",
+    });
   }
 
   return (
