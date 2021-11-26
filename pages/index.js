@@ -129,14 +129,14 @@ function Index() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto h-screen">
-      <div className="my-3 flex flex-row justify-between items-center">
-        <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-800 to-red-500">
+    <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen">
+      <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-800 to-red-500">
           FANTOM MUNKS
         </h1>
 
         <button
-          className="h-10 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white"
+          className="h-10 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0"
           onClick={connectWallet}
         >
           {isReady
@@ -148,9 +148,9 @@ function Index() {
         </button>
       </div>
 
-      <div className="flex flex-row justify-between mt-10">
-        <div>
-          <div>
+      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll">
+        <div className="flex flex-col order-5 sm:order-1">
+          <div className="order-5 sm:order-1">
             This is the first collection created inside the{" "}
             <span>MUNKVERSE.</span>
             <br />
@@ -177,13 +177,11 @@ function Index() {
             >
               fantomchess.com
             </a>
-            <br />
-            <br />
           </div>
 
           {isReady ? (
             <button
-              className="h-10 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white"
+              className="h-10 order-1 sm:order-5 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white"
               onClick={handleClaim}
             >
               {isClaiming ? "loading..." : "Claim (1 FTM)"}
@@ -194,16 +192,16 @@ function Index() {
             </div>
           )}
 
-          <div className="flex flex-row my-5">
-            <div className="flex flex-col pr-7">
+          <div className="flex flex-col sm:flex-row my-5 order-2 sm:order-6 justify-between">
+            <div className="flex flex-col py-2 sm:py-0 sm:pr-7">
               <span className="font-bold text-xl">10.000</span>
               <span>Munks to be claim</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-xl">1 FTM</span>
+              <span className="font-bold py-2 sm:py-0 text-xl">1 FTM</span>
               <span>Mint price</span>
             </div>
-            <div className="flex flex-col pl-7">
+            <div className="flex flex-col py-2 sm:py-0 sm:pl-7">
               {isReady && (
                 <>
                   <span className="font-bold text-xl">
@@ -216,7 +214,7 @@ function Index() {
           </div>
         </div>
 
-        <div>
+        <div className="order-1 sm:order-5">
           <div>
             <Image
               src="/assets/munk1.gif"
