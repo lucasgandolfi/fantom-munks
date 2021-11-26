@@ -131,12 +131,12 @@ function Index() {
   return (
     <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen">
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-800 to-red-500">
+        <h1 className="text-3xl sm:text-5xl font-extrabold text-purple-800">
           FANTOM MUNKS
         </h1>
 
         <button
-          className="h-10 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0"
+          className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0"
           onClick={connectWallet}
         >
           {isReady
@@ -151,11 +151,14 @@ function Index() {
       <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden">
         <div className="flex flex-col order-5 sm:order-1">
           <div className="order-5 sm:order-1">
-            This is the first collection created inside the{" "}
-            <span>MUNKVERSE.</span>
+            <span className="font-bold text-lg">
+              This is the first collection created inside the{" "}
+              <span className="text-purple-800 font-bold">MUNKVERSE.</span>
+            </span>
             <br />
             <br />
-            What is the <span>MUNKVERSE</span>?
+            What is the{" "}
+            <span className="text-purple-800 font-bold">MUNKVERSE</span>?
             <br />
             It's just where all Munks live.
             <br />
@@ -181,10 +184,10 @@ function Index() {
 
           {isReady ? (
             <button
-              className="h-10 order-1 sm:order-5 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white"
+              className="transition-all duration-500 ease-in-out h-10 order-1 sm:order-5 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white"
               onClick={handleClaim}
             >
-              {isClaiming ? "loading..." : "Claim (1 FTM)"}
+              {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
             </button>
           ) : (
             <div>
@@ -221,7 +224,7 @@ function Index() {
               alt="munk"
               width="450"
               height="450"
-              className="rounded-xl"
+              className="rounded-xl shadow-xl"
             />
           </div>
 
