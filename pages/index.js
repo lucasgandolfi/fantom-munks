@@ -148,7 +148,7 @@ function Index() {
         </button>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll">
+      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden">
         <div className="flex flex-col order-5 sm:order-1">
           <div className="order-5 sm:order-1">
             This is the first collection created inside the{" "}
