@@ -129,12 +129,16 @@ function Index() {
   }
 
   return (
-    <>
-      <div className="geeks"></div>
-      <div className="header">
-        <div className="tittle colorGradient">FANTOM MUNKS</div>
+    <div className="max-w-5xl mx-auto h-screen">
+      <div className="my-3 flex flex-row justify-between items-center">
+        <h1 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-purple-800 to-red-500">
+          FANTOM MUNKS
+        </h1>
 
-        <button className="button" onClick={connectWallet}>
+        <button
+          className="h-10 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white"
+          onClick={connectWallet}
+        >
           {isReady
             ? address?.substring(0, 6) +
               "..." +
@@ -144,111 +148,107 @@ function Index() {
         </button>
       </div>
 
-      <div id="app">
-        <div className="form-container">
-          <div className="content-container">
-            <div className="image-frame">
-              <Image
-                src="/assets/munk1.gif"
-                alt="munk"
-                width="350"
-                height="350"
-              />
-            </div>
-
-            <div>
-              This is the first collection created inside the{" "}
-              <div className="colorGradient">MUNKVERSE.</div>
-              <br />
-              <br />
-              What is the <div className="colorGradient">MUNKVERSE</div>?
-              <br />
-              It's just where all Munks live.
-              <br />
-              Munk is a character created by 16 years old's mind around 2008.
-              <br />
-              I've never stopped drawing this same character.
-              <br />
-              Now I think it's perfect for NFTs.
-              <br />
-              I hope you stick around to see more.
-              <br />
-              <br />
-              This would not be possible without the amazing project:
-              <br />
-              <div className="colorGradient">Fantom Chess.</div>
-              <br />
-              Please, check it at{" "}
-              <a
-                href="https://www.fantomchess.com"
-                className="mr-10"
-                target="_blank"
-              >
-                <div className="colorGradient">fantomchess.com</div>
-              </a>
-              <br />
-              <br />
-              <br />
-              There are <div className="colorGradient">10.000</div> Munks ready
-              to be claim.
-              <br />
-              Price: <div className="colorGradient">1 FTM</div> each
-              <br />
-              <br />
-              <a
-                href="https://twitter.com/munks_nft"
-                target="_blank"
-                className="mr-10"
-              >
-                <Image
-                  src="/assets/twitter.svg"
-                  alt="munk"
-                  width="20"
-                  height="20"
-                />
-              </a>
-              <a
-                href={`https://ftmscan.com/address/${contractAddress}`}
-                className="mr-10"
-                target="_blank"
-              >
-                <Image
-                  src="/assets/fantom.svg"
-                  alt="munk"
-                  width="20"
-                  height="20"
-                />
-              </a>
-            </div>
+      <div className="flex flex-row justify-between mt-10">
+        <div>
+          <div>
+            This is the first collection created inside the{" "}
+            <span>MUNKVERSE.</span>
+            <br />
+            <br />
+            What is the <span>MUNKVERSE</span>?
+            <br />
+            It's just where all Munks live.
+            <br />
+            Munk is a character created by 16 years old's mind around 2008.
+            <br />
+            I've never stopped drawing this same character.
+            <br />
+            Now I think it's perfect for NFTs.
+            <br />
+            I hope you stick around to see more.
+            <br />
+            <br />
+            This would not be possible without the amazing project:
+            <br />
+            <a
+              className="text-blue-600"
+              href="https://www.fantomchess.com"
+              target="_blank"
+            >
+              fantomchess.com
+            </a>
+            <br />
+            <br />
           </div>
 
-          <br />
-
-          {isReady && (
-            <div>
-              Available {maxMintable - supply}/{maxMintable}
-            </div>
-          )}
-
-          {isReady && (
+          {isReady ? (
             <button
-              className="button"
-              style={{ marginLeft: "auto", marginRight: "auto", marginTop: 20 }}
+              className="h-10 bg-gradient-to-r from-purple-400 to-red-500 px-4 rounded-xl text-white"
               onClick={handleClaim}
             >
               {isClaiming ? "loading..." : "Claim (1 FTM)"}
             </button>
-          )}
-
-          {!isReady && (
-            <div className="colorGradient">
+          ) : (
+            <div>
               <br></br>Connect your wallet to claim
             </div>
           )}
+
+          <div className="flex flex-row my-5">
+            <div className="flex flex-col pr-7">
+              <span className="font-bold text-xl">10.000</span>
+              <span>Munks to be claim</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-xl">1 FTM</span>
+              <span>Mint price</span>
+            </div>
+            <div className="flex flex-col pl-7">
+              {isReady && (
+                <>
+                  <span className="font-bold text-xl">
+                    {maxMintable - supply}
+                  </span>
+                  <span>Munks available </span>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <Image
+              src="/assets/munk1.gif"
+              alt="munk"
+              width="450"
+              height="450"
+              className="rounded-xl"
+            />
+          </div>
+
+          <br />
         </div>
       </div>
+      <footer className="flex flex-row align-center justify-center">
+        <a
+          href="https://twitter.com/munks_nft"
+          target="_blank"
+          className="mx-5"
+        >
+          <Image src="/assets/twitter.svg" alt="munk" width="20" height="20" />
+        </a>
+
+        <a
+          href={`https://ftmscan.com/address/${contractAddress}`}
+          className="mx-5"
+          target="_blank"
+        >
+          <Image src="/assets/fantom.svg" alt="munk" width="20" height="20" />
+        </a>
+      </footer>
       <ToastContainer />
-    </>
+    </div>
   );
 }
 
