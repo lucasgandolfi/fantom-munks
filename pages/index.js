@@ -150,7 +150,7 @@ function Index() {
 
       <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden">
         <div className="flex flex-col order-5 sm:order-1">
-          <div className="order-5 sm:order-1">
+          <div className="order-5 sm:order-1 mb-3">
             <span className="font-bold text-lg">
               This is the first collection created inside the{" "}
               <span className="text-purple-800 font-bold">MUNKVERSE.</span>
