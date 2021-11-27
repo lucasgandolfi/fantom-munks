@@ -135,6 +135,13 @@ function Index() {
           FANTOM MUNKS
         </h1>
 
+        <a
+          href="#"
+          className="transition-all duration-500 ease-in-out text-purple-600 hover:text-purple-800 transform hover:scale-110"
+        >
+          My Munks
+        </a>
+
         <button
           className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0 transform hover:scale-110"
           onClick={connectWallet}
