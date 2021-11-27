@@ -136,7 +136,7 @@ function Index() {
         </h1>
 
         <button
-          className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0"
+          className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0 transform hover:scale-110"
           onClick={connectWallet}
         >
           {isReady
@@ -184,7 +184,7 @@ function Index() {
 
           {isReady ? (
             <button
-              className="transition-all duration-500 ease-in-out h-10 order-1 sm:order-5 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white"
+              className="self-center transition-all duration-500 ease-in-out h-10 order-1 sm:order-5 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12"
               onClick={handleClaim}
             >
               {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
