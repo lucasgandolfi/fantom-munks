@@ -109,7 +109,7 @@ function Index() {
   }
 
   return (
-    <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen">
+    <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen flex flex-col justify-between">
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
         <h1 className="text-3xl sm:text-5xl font-extrabold text-purple-800">
           FANTOM MUNKS
