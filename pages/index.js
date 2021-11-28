@@ -3,79 +3,56 @@ import Image from "next/image";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 
-import Web3 from "web3";
 import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
 import "react-toastify/dist/ReactToastify.css";
+import useWeb3 from "../hooks/useWeb3";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
 function Index() {
-  const [web3, setWeb3] = useState(null);
-  const [address, setAddress] = useState(null);
+  const { active, activate, deactivate, account, web3 } = useWeb3();
+
   const [contract, setContract] = useState(null);
   const [maxMintable, setMaxMintable] = useState(0);
   const [supply, setSupply] = useState(0);
   const [isClaiming, setIsClaiming] = useState(false);
-  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    connectWallet();
+    activate();
   }, []);
 
-  function connectWallet() {
-    if (!window.ethereum) {
-      alert("Please install MetaMask");
-      setIsReady(false);
-      return;
-    }
-
-    ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((accounts) => {
-        setAddress(accounts[0]);
-        let w3 = new Web3(window.web3.currentProvider);
-        setWeb3(w3);
-        let c = new w3.eth.Contract(FantomMunksAbi, contractAddress);
-        setContract(c);
-
-        c.methods
-          .totalSupply()
-          .call()
-          .then((supply) => {
-            setIsReady(true);
-            setSupply(supply);
-          })
-          .catch((err) => {
-            setIsReady(false);
-            setAddress(null);
-            setSupply(0);
-            setMaxMintable(0);
-            setContract(null);
-            toast.error("Check if you are using Fantom Network", {
-              theme: "colored",
-            });
+  useEffect(() => {
+    if (active) {
+      let c = new web3.eth.Contract(FantomMunksAbi, contractAddress);
+      setContract(c);
+      c.methods
+        .totalSupply()
+        .call()
+        .then((supply) => {
+          setSupply(supply);
+        })
+        .catch((err) => {
+          setSupply(0);
+          setMaxMintable(0);
+          setContract(null);
+          toast.error("Check if you are using Fantom Network", {
+            theme: "colored",
           });
-
-        c.methods
-          .maxMintable()
-          .call()
-          .then((maxMintable) => {
-            setMaxMintable(maxMintable);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        setIsReady(false);
-        toast.error("Check if you are using Fantom Network", {
-          theme: "colored",
         });
-      });
-  }
+
+      c.methods
+        .maxMintable()
+        .call()
+        .then((maxMintable) => {
+          setMaxMintable(maxMintable);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [active]);
 
   function handleClaim() {
-    let tx = claim();
-    console.log(tx);
+    claim();
   }
 
   async function loadData() {
@@ -93,40 +70,42 @@ function Index() {
   }
 
   function claim() {
-    setIsClaiming(true);
-    let _price = web3.utils.toWei("1");
+    if (account) {
+      setIsClaiming(true);
+      let _price = web3.utils.toWei("1");
 
-    const claimPromise = new Promise((resolve, reject) => {
-      contract.methods
-        .claim(1)
-        .send({
-          to: contractAddress,
-          from: address,
-          value: _price,
-        })
-        .once("error", (err) => {
-          console.log(err);
-          setIsClaiming(false);
-          reject();
-        })
-        .then((receipt) => {
-          console.log(receipt);
-          setIsClaiming(false);
-          loadData();
+      const claimPromise = new Promise((resolve, reject) => {
+        contract.methods
+          .claim(1)
+          .send({
+            to: contractAddress,
+            from: account,
+            value: _price,
+          })
+          .once("error", (err) => {
+            console.log(err);
+            setIsClaiming(false);
+            reject();
+          })
+          .then((receipt) => {
+            console.log(receipt);
+            setIsClaiming(false);
+            loadData();
 
-          const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
+            const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
 
-          resolve(link);
-        });
-    });
+            resolve(link);
+          });
+      });
 
-    toast.promise(claimPromise, {
-      pending: "Claiming...",
-      success: {
-        render: (link) => `Claimed!`,
-      },
-      error: "Something went wrong... Try again!",
-    });
+      toast.promise(claimPromise, {
+        pending: "Claiming...",
+        success: {
+          render: (link) => `Claimed!`,
+        },
+        error: "Something went wrong... Try again!",
+      });
+    }
   }
 
   return (
@@ -144,14 +123,13 @@ function Index() {
 
         <button
           className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0 transform hover:scale-110"
-          onClick={connectWallet}
+          onClick={() => activate()}
         >
-          {isReady
-            ? address?.substring(0, 6) +
+          {active
+            ? account.substring(0, 6) +
               "..." +
-              address?.substring(address.length - 4, address.length)
-            : "Connect"}{" "}
-          {}
+              account.substring(account.length - 4, account.length)
+            : "Connect"}
         </button>
       </div>
 
@@ -189,7 +167,7 @@ function Index() {
             </a>
           </div>
 
-          {isReady ? (
+          {active ? (
             <button
               className="self-center transition-all duration-500 ease-in-out h-10 order-1 sm:order-5 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12"
               onClick={handleClaim}
@@ -197,9 +175,7 @@ function Index() {
               {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
             </button>
           ) : (
-            <div>
-              <br></br>Connect your wallet to claim
-            </div>
+            <div>Connect your wallet to claim</div>
           )}
 
           <div className="flex flex-col sm:flex-row my-5 order-2 sm:order-6 justify-between">
@@ -212,7 +188,7 @@ function Index() {
               <span>Mint price</span>
             </div>
             <div className="flex flex-col py-2 sm:py-0 sm:pl-7">
-              {isReady && (
+              {active && (
                 <>
                   <span className="font-bold text-xl">
                     {maxMintable - supply}
