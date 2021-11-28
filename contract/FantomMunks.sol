@@ -1,95 +1,134 @@
-//SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 
-contract FantomMunks is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+contract FantomMunks is
+    ERC721,
+    ERC721Enumerable,
+    Ownable,
+    IERC2981
+{
     using Counters for Counters.Counter;
     using Strings for uint256;
 
     Counters.Counter private _tokenIdCounter;
-    address payable public depositAddress = payable(0xf7159D1E34EF333aB7737607d96d1F30E72a1Bb9);
-    uint256 public maxMintable = 10000;
-    string private _baseUrl;
-      string public baseExtension = ".json";
 
-    constructor(string memory baseUrl) ERC721("FantomMunks", "MNK") {
-        _baseUrl = baseUrl;
-    }
+    // Address to pay the mint and royalties
+    address payable public depositAddress =
+        payable(0xFc3778f4b877B25A2A6B501a6Bd987bB6B43F7e0);
+
+    uint256 public maxMintable = 10000;
+    uint256 public mintPrice = 1 ether;
+
+    string private baseUri = "https://fantom-munks-dev.vercel.app/api/munks/";
+
+    uint256 public royaltiesPercentage = 7;
+
+    constructor() ERC721("FantomMunks", "MNK") { }
 
     function _baseURI() internal view override returns (string memory) {
-        return _baseUrl;
+        return baseUri;
     }
 
-    function claim() public payable {
-        uint256 id = _tokenIdCounter.current();
-        uint256 price = 1 ether;
+    function claim(uint256 quantity) public payable {
+        require(quantity > 0, "Invalid amount");
+        require(
+            (_tokenIdCounter.current() + quantity) < (maxMintable),
+            "No more Munks are available"
+        );
 
-        require(msg.value == price, "Invalid amount");
-        require(id < (maxMintable), "No more MUNKS are available");
+        uint256 price = mintPrice * quantity;
 
-        // transfer amount to owner
+        require(msg.value >= price, "Invalid amount");
+
+        // transfer amount to depositAddress
         depositAddress.transfer(price);
 
-        _safeMint(msg.sender, id);
-        _tokenIdCounter.increment();
+        for (uint256 i = 0; i < quantity; i++) {
+            uint256 id = _tokenIdCounter.current();
+            _safeMint(msg.sender, id);
+
+            _tokenIdCounter.increment();
+        }
     }
 
-    function setTokenURI(uint256 tokenId, string memory newURI) public onlyOwner {
-        _setTokenURI(tokenId, newURI);
+    function setBaseURI(string memory newURI) public onlyOwner {
+        baseUri = newURI;
     }
-    
-    function setBaseURL(string memory newBase) public onlyOwner {
-        _baseUrl = newBase;
-    }
-    
-    function setBaseExtension(string memory _newBaseExtension) public onlyOwner {
-        baseExtension = _newBaseExtension;
-    }
-    
+
+    // Change the deposit address
     function setDepositAddress(address payable to) public onlyOwner {
         depositAddress = to;
     }
-    
-    // The following functions are overrides required by Solidity.
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        override(ERC721, ERC721Enumerable)
-    {
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+    function _burn(uint256 tokenId)
+        internal
+        override(ERC721)
+    {
         super._burn(tokenId);
     }
 
+    // Returnes the URI of the token
     function tokenURI(uint256 tokenId)
         public
         view
-        override(ERC721, ERC721URIStorage)
+        override(ERC721)
         returns (string memory)
     {
         require(
-          _exists(tokenId),
-          "ERC721Metadata: URI query for nonexistent token"
+            _exists(tokenId),
+            "ERC721Metadata: URI query for nonexistent token"
         );
-    
+
         string memory currentBaseURI = _baseURI();
-        return bytes(currentBaseURI).length > 0
-            ? string(abi.encodePacked(currentBaseURI, tokenId.toString(), baseExtension))
-            : "";
+        return
+            bytes(currentBaseURI).length > 0
+                ? string(
+                    abi.encodePacked(
+                        currentBaseURI,
+                        tokenId.toString(),
+                        ".json"
+                    )
+                )
+                : "";
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable)
+        override(ERC721, ERC721Enumerable, IERC165)
         returns (bool)
     {
-        return super.supportsInterface(interfaceId);
+        return
+        type(IERC2981).interfaceId == interfaceId ||
+        super.supportsInterface(interfaceId);
+    }
+
+    // Change royalties percentage in secondary sales
+    function setRoyaltiesPercentage(uint256 newPercentage) public onlyOwner {
+        royaltiesPercentage = newPercentage;
+    }
+
+    // EIP-2981: Royalty Standard
+    function royaltyInfo(uint256 tokenId, uint256 _salePrice)
+        external
+        view
+        override(IERC2981)
+        returns (address receiver, uint256 royaltyAmount)
+    {
+        uint256 _royalties = ((_salePrice * royaltiesPercentage) / 100);
+        return (depositAddress, _royalties);
     }
 }
