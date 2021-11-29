@@ -18,6 +18,8 @@ function Index() {
   const [supply, setSupply] = useState(0);
   const [isClaiming, setIsClaiming] = useState(false);
 
+  const [mintQuantity, setMintQuantity] = useState(0);
+
   useEffect(() => {
     activate();
   }, []);
@@ -108,6 +110,18 @@ function Index() {
     }
   }
 
+  const changeQuantity = (operation) => {
+    if (operation === "add") {
+      if (mintQuantity < maxMintable) {
+        setMintQuantity(mintQuantity + 1);
+      }
+    } else {
+      if (mintQuantity > 0) {
+        setMintQuantity(mintQuantity - 1);
+      }
+    }
+  };
+
   return (
     <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen flex flex-col justify-between">
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
@@ -168,12 +182,37 @@ function Index() {
           </div>
 
           {active ? (
-            <button
-              className="self-center transition-all duration-500 ease-in-out h-10 order-1 sm:order-5 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12"
-              onClick={handleClaim}
-            >
-              {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
-            </button>
+            <div className="order-1 sm:order-5 flex flex-col items-center">
+              <div className="flex flex-row items-center justify-center w-10/12">
+                <button
+                  className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center"
+                  onClick={() => changeQuantity("subtract")}
+                >
+                  -
+                </button>
+                <input
+                  className="transition-all duration-500 ease-in-out hover:shadow-xl p-2 my-2 rounded-xl border-2 border-purple-600 mx-2"
+                  type="number"
+                  placeholder="Munks quantity"
+                  min="0"
+                  value={mintQuantity}
+                  onChange={(e) => setMintQuantity(e.target.value)}
+                />
+                <button
+                  className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center"
+                  onClick={() => setMintQuantity(mintQuantity + 1)}
+                >
+                  +
+                </button>
+              </div>
+              <button
+                className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12"
+                onClick={handleClaim}
+                onClick={() => changeQuantity("add")}
+              >
+                {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
+              </button>
+            </div>
           ) : (
             <div>Connect your wallet to claim</div>
           )}
