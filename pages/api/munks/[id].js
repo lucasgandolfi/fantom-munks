@@ -1,6 +1,6 @@
 import Cors from "cors";
-import Web3 from "web3";
 import FantomMunks from "../../../contract/abis/FantomMunks.json";
+import { ethers } from "ethers";
 
 export default async function handler(req, res) {
   // Ignore .json extension
@@ -9,20 +9,20 @@ export default async function handler(req, res) {
   await Cors(req, res);
 
   // Web3 stuff
-  const web3provider = new Web3.providers.HttpProvider(
+
+  const web3 = new ethers.providers.JsonRpcProvider(
     process.env.NEXT_PUBLIC_NETWORK_RPC
   );
-  const web3 = new Web3(web3provider);
   // Loading FantomMunks abi
-  const contract = new web3.eth.Contract(
+  const contract = new ethers.Contract(
+    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
     FantomMunks,
-    process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+    web3
   );
 
   // Check if munk has owner
-  contract.methods
+  contract
     .ownerOf(id)
-    .call()
     .then(() => {
       // Fetch the munk metadata
       fetch(`${process.env.METADATA_URL}/${id}.json`)

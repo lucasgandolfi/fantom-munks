@@ -2,10 +2,10 @@ import "../styles/globals.css";
 import Head from "next/head";
 
 import { Web3ReactProvider } from "@web3-react/core";
-import Web3 from "web3";
+import { Web3Provider } from "@ethersproject/providers";
 
 function getLibrary(provider) {
-  return new Web3(provider);
+  return new Web3Provider(provider);
 }
 
 function MyApp({ Component, pageProps }) {

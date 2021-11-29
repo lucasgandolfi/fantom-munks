@@ -7,6 +7,7 @@ import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
 import "react-toastify/dist/ReactToastify.css";
 import useWeb3 from "../hooks/useWeb3";
+import { ethers } from "ethers";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 const MINT_PRICE = Number(process.env.NEXT_PUBLIC_MINT_PRICE);
@@ -27,11 +28,14 @@ function Index() {
 
   useEffect(() => {
     if (active) {
-      let c = new web3.eth.Contract(FantomMunksAbi, contractAddress);
+      let c = new ethers.Contract(
+        contractAddress,
+        FantomMunksAbi,
+        web3.getSigner(account)
+      );
+
       setContract(c);
-      c.methods
-        .totalSupply()
-        .call()
+      c.totalSupply()
         .then((supply) => {
           setSupply(supply);
         })
@@ -44,9 +48,7 @@ function Index() {
           });
         });
 
-      c.methods
-        .maxMintable()
-        .call()
+      c.maxMintable()
         .then((maxMintable) => {
           setMaxMintable(maxMintable);
         })
@@ -59,13 +61,12 @@ function Index() {
   }
 
   async function loadData() {
-    let totalSupply = await contract.methods.totalSupply().call();
+    let totalSupply = await contract.totalSupply();
 
     setSupply(totalSupply);
 
-    contract.methods
+    contract
       .maxMintable()
-      .call()
       .then((maxMintable) => {
         setMaxMintable(maxMintable);
       })
@@ -75,20 +76,15 @@ function Index() {
   function claim() {
     if (account) {
       setIsClaiming(true);
-      let _price = web3.utils.toWei(String(MINT_PRICE * mintQuantity));
+      let _price = ethers.utils.parseUnits(
+        String(MINT_PRICE * mintQuantity),
+        18
+      );
 
       const claimPromise = new Promise((resolve, reject) => {
-        contract.methods
-          .claim(mintQuantity)
-          .send({
-            to: contractAddress,
-            from: account,
+        contract
+          .claim(mintQuantity, {
             value: _price,
-          })
-          .once("error", (err) => {
-            console.log(err);
-            setIsClaiming(false);
-            reject();
           })
           .then((receipt) => {
             console.log(receipt);
@@ -98,6 +94,9 @@ function Index() {
             const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
 
             resolve(link);
+          })
+          .catch((err) => {
+            console.log("error", err);
           });
       });
 
