@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useWeb3 from "../hooks/useWeb3";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+const MINT_PRICE = Number(process.env.NEXT_PUBLIC_MINT_PRICE);
 
 function Index() {
   const { active, activate, deactivate, account, web3 } = useWeb3();
@@ -74,11 +75,11 @@ function Index() {
   function claim() {
     if (account) {
       setIsClaiming(true);
-      let _price = web3.utils.toWei("1");
+      let _price = web3.utils.toWei(String(MINT_PRICE * mintQuantity));
 
       const claimPromise = new Promise((resolve, reject) => {
         contract.methods
-          .claim(1)
+          .claim(mintQuantity)
           .send({
             to: contractAddress,
             from: account,
@@ -200,17 +201,26 @@ function Index() {
                 />
                 <button
                   className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center"
-                  onClick={() => setMintQuantity(mintQuantity + 1)}
+                  onClick={() => changeQuantity("add")}
                 >
                   +
                 </button>
               </div>
               <button
-                className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12"
+                className={[
+                  `${
+                    mintQuantity === 0
+                      ? "bg-gray-400 hover:bg-gray-600"
+                      : "bg-purple-600 hover:bg-purple-800"
+                  }`,
+                  "transition-all duration-500 ease-in-out h-10 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12",
+                ]}
+                disabled={mintQuantity === 0}
                 onClick={handleClaim}
-                onClick={() => changeQuantity("add")}
               >
-                {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
+                {isClaiming
+                  ? "Claiming..."
+                  : `Claim (${mintQuantity * MINT_PRICE} FTM)`}
               </button>
             </div>
           ) : (
