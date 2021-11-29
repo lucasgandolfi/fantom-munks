@@ -10,14 +10,17 @@
   },
   "dependencies": {
     "@ethereumjs/common": "^2.6.0",
+    "@ethersproject/providers": "^5.5.0",
+    "@web3-react/core": "^6.1.9",
+    "@web3-react/injected-connector": "^6.0.7",
     "cors": "^2.8.5",
+    "ethers": "^5.5.1",
     "next": "^11.1.2",
     "next-images": "^1.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-toastify": "^8.1.0",
-    "sweetalert2": "^11.1.9",
-    "web3": "^1.6.0"
+    "sweetalert2": "^11.1.9"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",
