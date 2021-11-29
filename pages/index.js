@@ -56,10 +56,6 @@ function Index() {
     }
   }, [active]);
 
-  function handleClaim() {
-    claim();
-  }
-
   async function loadData() {
     let totalSupply = await contract.totalSupply();
 
@@ -215,7 +211,7 @@ function Index() {
                   "transition-all duration-500 ease-in-out h-10 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12",
                 ]}
                 disabled={mintQuantity === 0}
-                onClick={handleClaim}
+                onClick={claim}
               >
                 {isClaiming
                   ? "Claiming..."
