@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import useMunks from "../hooks/useMunks";
 import useWeb3 from "../hooks/useWeb3";
+import { toast } from "react-toastify";
 
 export default function MyMunksPage() {
   const { active, activate, deactivate, account, web3 } = useWeb3();
@@ -19,26 +20,37 @@ export default function MyMunksPage() {
 
   useEffect(() => {
     if (contract && userMunks.length === 0) {
-      getUserMunks()
-        .then((munks) => {
-          if (munks) {
-            Promise.all(
-              munks.map((munk) =>
-                getMunkMetadata(ethers.utils.formatUnits(munk, 0))
+      const getMunksPromise = new Promise((resolve, reject) => {
+        getUserMunks()
+          .then((munks) => {
+            if (munks) {
+              Promise.all(
+                munks.map((munk) =>
+                  getMunkMetadata(ethers.utils.formatUnits(munk, 0))
+                )
               )
-            )
-              .then((metadatas) => {
-                console.log("metadatas", metadatas);
-                setUserMunks(metadatas);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+                .then((metadatas) => {
+                  console.log("metadatas", metadatas);
+                  setUserMunks(metadatas);
+                  resolve();
+                })
+                .catch((error) => {
+                  console.log(error);
+                  reject();
+                });
+            } else {
+              reject();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+      toast.promise(getMunksPromise, {
+        success: "Munks loaded",
+        pending: "Loading munks...",
+        error: "Error loading munks",
+      });
     }
   }, [contract]);
 
@@ -93,7 +105,11 @@ export default function MyMunksPage() {
             return (
               <li className="flex flex-col items-center justify-center">
                 <button type="button" onClick={() => openMunkDetails(munk)}>
-                  <img src={munk.image} alt={munk.name} className="w-64 h-64" />
+                  <img
+                    src={munk.image}
+                    alt={munk.name}
+                    className="w-64 h-64 rounded-xl"
+                  />
                   <span className="font-bold py-2">{munk.name}</span>
                 </button>
               </li>

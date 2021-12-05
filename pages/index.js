@@ -1,11 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
-import "react-toastify/dist/ReactToastify.css";
 import useWeb3 from "../hooks/useWeb3";
 import { ethers } from "ethers";
 
@@ -277,7 +276,6 @@ function Index() {
           <Image src="/assets/fantom.svg" alt="munk" width="20" height="20" />
         </a>
       </footer>
-      <ToastContainer />
     </div>
   );
 }
