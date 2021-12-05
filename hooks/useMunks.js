@@ -38,7 +38,11 @@ const useMunks = (web3, account) => {
   const getMunkMetadata = async (munkId) => {
     const response = await fetch(`/api/munks/${munkId}.json`);
     if (response.status === 200) {
-      const data = await response.json();
+      let data = await response.json();
+      data = {
+        ...data,
+        id: munkId,
+      };
       return data;
     } else if (munkId > 0 && response.status === 500) {
       return await getMunkMetadata(munkId);

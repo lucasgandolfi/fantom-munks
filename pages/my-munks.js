@@ -9,6 +9,7 @@ export default function MyMunksPage() {
   const { contract, getUserMunks, getMunkMetadata } = useMunks(web3, account);
 
   const [userMunks, setUserMunks] = useState([]);
+  const [munkSelected, setMunkSelected] = useState(null);
 
   useEffect(() => {
     if (web3) {
@@ -41,8 +42,16 @@ export default function MyMunksPage() {
     }
   }, [contract]);
 
+  const openMunkDetails = (munk) => {
+    setMunkSelected(munk);
+  };
+
   return (
-    <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen">
+    <div
+      className={`px-5 sm:max-w-5xl mx-auto sm:h-screen ${
+        munkSelected != null ? "overflow-hidden" : ""
+      }`}
+    >
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
         <Link href="/">
           <a className="text-3xl sm:text-5xl font-extrabold text-purple-800">
@@ -79,17 +88,62 @@ export default function MyMunksPage() {
           My Munks
         </h1>
         <ul className="grid grid-cols-4 gap-4">
-          {userMunks.map((munk, index) => {
+          {userMunks.map((munk) => {
             if (!munk) return null;
             return (
               <li className="flex flex-col items-center justify-center">
-                <img src={munk.image} alt={munk.name} className="w-64 h-64" />
-                <span className="font-bold py-2">{munk.name}</span>
+                <button type="button" onClick={() => openMunkDetails(munk)}>
+                  <img src={munk.image} alt={munk.name} className="w-64 h-64" />
+                  <span className="font-bold py-2">{munk.name}</span>
+                </button>
               </li>
             );
           })}
         </ul>
       </div>
+      {munkSelected != null && (
+        <div
+          className="w-full h-full absolute bottom-0 top-0 left-0 right-0 bg-purple-900 bg-opacity-50 flex items-center justify-center"
+          onClick={() => setMunkSelected(null)}
+        >
+          <div
+            className="w-3/4 h-3/4 rounded-xl bg-white p-5 flex flex-row "
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={munkSelected.image}
+              alt={munkSelected.name}
+              className="w-2/4 mx-auto rounded-xl"
+            />
+            <div className="w-2/4 p-5">
+              <h2 className="font-extrabold text-xl pb-5">
+                {munkSelected.name}
+              </h2>
+              <table className="w-full">
+                <tr>
+                  <th className="text-left">Attribute</th>
+                  <th className="text-left">Value</th>
+                  <th className="text-left">Rarity</th>
+                </tr>
+                {munkSelected.attributes.map((attr) => {
+                  return (
+                    <tr>
+                      <td>{attr.trait_type}</td>
+                      <td>{attr.value}</td>
+                      <td>Soon!</td>
+                    </tr>
+                  );
+                })}
+              </table>
+              <div className="flex transition-all duration-500 ease-in-out bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full transform hover:scale-105 mt-3 text-center">
+                <a href="#" className="py-3 w-full h-full">
+                  PaintSwap
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
