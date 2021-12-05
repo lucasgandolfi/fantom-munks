@@ -27,7 +27,7 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    if (active) {
+    if (active && web3) {
       let c = new ethers.Contract(
         contractAddress,
         FantomMunksAbi,
@@ -54,7 +54,7 @@ function Index() {
         })
         .catch((err) => console.log(err));
     }
-  }, [active]);
+  }, [active, web3]);
 
   async function loadData() {
     let totalSupply = await contract.totalSupply();
