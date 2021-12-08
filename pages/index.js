@@ -1,11 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
-import "react-toastify/dist/ReactToastify.css";
 import useWeb3 from "../hooks/useWeb3";
 import { ethers } from "ethers";
 
@@ -27,7 +26,7 @@ function Index() {
   }, []);
 
   useEffect(() => {
-    if (active) {
+    if (active && web3) {
       let c = new ethers.Contract(
         contractAddress,
         FantomMunksAbi,
@@ -54,7 +53,7 @@ function Index() {
         })
         .catch((err) => console.log(err));
     }
-  }, [active]);
+  }, [active, web3]);
 
   async function loadData() {
     let totalSupply = await contract.totalSupply();
@@ -121,9 +120,11 @@ function Index() {
   return (
     <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen flex flex-col justify-between">
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-purple-800">
-          FANTOM MUNKS
-        </h1>
+        <Link href="/">
+          <a className="text-3xl sm:text-5xl font-extrabold text-purple-800">
+            FANTOM MUNKS
+          </a>
+        </Link>
 
         <Link href="/my-munks">
           <a className="transition-all duration-500 ease-in-out text-purple-600 hover:text-purple-800 transform hover:scale-110">
@@ -275,7 +276,6 @@ function Index() {
           <Image src="/assets/fantom.svg" alt="munk" width="20" height="20" />
         </a>
       </footer>
-      <ToastContainer />
     </div>
   );
 }
