@@ -137,10 +137,10 @@ function Index() {
       </div>
 
       <div className="flex flex-col sm:flex-row sm:justify-between items-center mt-3 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden bg-white px-7 py-4 rounded-3xl">
-        <div className="flex flex-col order-5 sm:order-1 w-5/12">
+        <div className="flex flex-col order-5 sm:order-1 w-full sm:w-5/12">
           <div className="flex flex-row justify-evenly mb-5 items-center">
             <Image src="/assets/ancient-munks.png" width={55} height={60} />
-            <div>
+            <div className="px-2">
               <h2 className="text-purple-600">An ancient legend says:</h2>
               <h2 className="font-bold italic text-purple-600">
                 For every hand, a blade.
@@ -242,7 +242,7 @@ function Index() {
           </div>
         </div>
 
-        <div className="order-1 sm:order-5 w-5/12">
+        <div className="order-1 sm:order-5 w-full sm:w-5/12">
           <div>
             <Image
               src="/assets/munk1.gif"
