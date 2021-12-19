@@ -121,9 +121,7 @@ function Index() {
     <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen flex flex-col justify-between">
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
         <Link href="/">
-          <a className="text-3xl sm:text-5xl font-extrabold text-purple-800">
-            FANTOM MUNKS
-          </a>
+          <Image src="/assets/logo.png" width="400" height="65" />
         </Link>
 
         <Link href="/my-munks">
@@ -144,38 +142,43 @@ function Index() {
         </button>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden">
-        <div className="flex flex-col order-5 sm:order-1">
-          <div className="order-5 sm:order-1 mb-3">
-            <span className="font-bold text-lg">
-              This is the first collection created inside the{" "}
-              <span className="text-purple-800 font-bold">MUNKVERSE.</span>
-            </span>
+      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden bg-white p-7 rounded-3xl">
+        <div className="flex flex-col order-5 sm:order-1 w-7/12">
+          <div className="flex flex-row justify-evenly mb-5 items-center">
+            <Image src="/assets/ancient-munks.png" width={55} height={60} />
+            <div>
+              <h2 className="text-purple-600">An ancient legend says:</h2>
+              <h2 className="italic text-purple-600">
+                For every hand, a blade.
+              </h2>
+              <h2 className="italic text-purple-600">
+                For every existence, a path.
+              </h2>
+              <h2 className="font-bold italic text-purple-600">
+                Hold to prepare. Wait for the call.
+              </h2>
+            </div>
+            <Image src="/assets/ancient-munks.png" width={55} height={60} />
+          </div>
+
+          <div className="order-5 sm:order-1 mb-3 text-sm">
+            <p className="font-bold">
+              Welcome to the first collection inside the MUNKVERSE. <br />
+              This is your gateway to this amazing journey.
+              <br />
+              Claim your MUNK. Stay safe.
+            </p>
             <br />
-            <br />
-            What is the{" "}
-            <span className="text-purple-800 font-bold">MUNKVERSE</span>?
-            <br />
-            It's just where all Munks live.
-            <br />
-            Munk is a character created by 16 years old's mind around 2008.
-            <br />
-            I've never stopped drawing this same character.
-            <br />
-            Now I think it's perfect for NFTs.
-            <br />
-            I hope you stick around to see more.
-            <br />
-            <br />
-            This would not be possible without the amazing project:
-            <br />
-            <a
-              className="text-blue-600"
-              href="https://www.fantomchess.com"
-              target="_blank"
-            >
-              fantomchess.com
-            </a>
+            <p>
+              <span className="font-bold">Mint a MUNK:</span> get a profile-pic
+              with cool shapes and colors.
+              <br />
+              <span className="font-bold">Hold your MUNK:</span> get some cool
+              game-asset-like NFTs.
+              <br />
+              <span className="font-bold">Hold everything:</span> get a
+              strategy-game.
+            </p>
           </div>
 
           {active ? (
@@ -245,13 +248,13 @@ function Index() {
           </div>
         </div>
 
-        <div className="order-1 sm:order-5">
+        <div className="order-1 sm:order-5 w-4/12">
           <div>
             <Image
               src="/assets/munk1.gif"
               alt="munk"
-              width="450"
-              height="450"
+              width="400"
+              height="400"
               className="rounded-xl shadow-xl"
             />
           </div>
@@ -259,23 +262,7 @@ function Index() {
           <br />
         </div>
       </div>
-      <footer className="flex flex-row align-center justify-center">
-        <a
-          href="https://twitter.com/munks_nft"
-          target="_blank"
-          className="mx-5"
-        >
-          <Image src="/assets/twitter.svg" alt="munk" width="20" height="20" />
-        </a>
-
-        <a
-          href={`https://ftmscan.com/address/${contractAddress}`}
-          className="mx-5"
-          target="_blank"
-        >
-          <Image src="/assets/fantom.svg" alt="munk" width="20" height="20" />
-        </a>
-      </footer>
+      <div></div>
     </div>
   );
 }

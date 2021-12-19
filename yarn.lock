@@ -1776,7 +1776,7 @@
   "resolved" "https://registry.npmjs.org/eslint-visitor-keys/-/eslint-visitor-keys-3.0.0.tgz"
   "version" "3.0.0"
 
-"eslint@8.0.0":
+"eslint@^8.0.0":
   "integrity" "sha512-03spzPzMAO4pElm44m60Nj08nYonPGQXmw6Ceai/S4QK82IgwWO1EXx1s9namKzVlbVu3Jf81hb+N+8+v21/HQ=="
   "resolved" "https://registry.npmjs.org/eslint/-/eslint-8.0.0.tgz"
   "version" "8.0.0"

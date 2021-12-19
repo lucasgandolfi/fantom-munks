@@ -2,6 +2,9 @@
   "name": "fantom-munks",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "14.18.2"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -24,7 +27,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",
-    "eslint": "8.0.0",
+    "eslint": "^8.0.0",
     "eslint-config-next": "11.1.2",
     "postcss": "^8.4.1",
     "tailwindcss": "^2.2.19"
