@@ -7,6 +7,7 @@ import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
 import useWeb3 from "../hooks/useWeb3";
 import { ethers } from "ethers";
+import Button from "../components/Button";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 const MINT_PRICE = Number(process.env.NEXT_PUBLIC_MINT_PRICE);
@@ -124,34 +125,27 @@ function Index() {
           <Image src="/assets/logo.png" width="400" height="65" />
         </Link>
 
-        <Link href="/my-munks">
-          <a className="transition-all duration-500 ease-in-out text-purple-600 hover:text-purple-800 transform hover:scale-110">
-            My Munks
-          </a>
-        </Link>
+        <Button path="/my-munks">My munks</Button>
 
-        <button
-          className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0 transform hover:scale-110"
-          onClick={() => activate()}
-        >
+        <Button onClick={() => activate()}>
           {active
             ? account.substring(0, 6) +
               "..." +
               account.substring(account.length - 4, account.length)
             : "Connect"}
-        </button>
+        </Button>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden bg-white p-7 rounded-3xl">
-        <div className="flex flex-col order-5 sm:order-1 w-7/12">
+      <div className="flex flex-col sm:flex-row sm:justify-between items-center mt-3 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden bg-white px-7 py-4 rounded-3xl">
+        <div className="flex flex-col order-5 sm:order-1 w-5/12">
           <div className="flex flex-row justify-evenly mb-5 items-center">
             <Image src="/assets/ancient-munks.png" width={55} height={60} />
             <div>
               <h2 className="text-purple-600">An ancient legend says:</h2>
-              <h2 className="italic text-purple-600">
+              <h2 className="font-bold italic text-purple-600">
                 For every hand, a blade.
               </h2>
-              <h2 className="italic text-purple-600">
+              <h2 className="font-bold italic text-purple-600">
                 For every existence, a path.
               </h2>
               <h2 className="font-bold italic text-purple-600">
@@ -248,13 +242,13 @@ function Index() {
           </div>
         </div>
 
-        <div className="order-1 sm:order-5 w-4/12">
+        <div className="order-1 sm:order-5 w-5/12">
           <div>
             <Image
               src="/assets/munk1.gif"
               alt="munk"
-              width="400"
-              height="400"
+              width="600"
+              height="600"
               className="rounded-xl shadow-xl"
             />
           </div>
