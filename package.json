@@ -2,9 +2,6 @@
   "name": "fantom-munks",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "14.18.2"
-  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
