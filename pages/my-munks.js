@@ -106,7 +106,10 @@ export default function MyMunksPage() {
               <li className="flex flex-col items-center justify-center">
                 <button type="button" onClick={() => openMunkDetails(munk)}>
                   <img
-                    src={munk.image}
+                    src={munk.image.replace(
+                      "ipfs://",
+                      "https://cloudflare-ipfs.com/ipfs/"
+                    )}
                     alt={munk.name}
                     className="w-64 h-64 rounded-xl"
                   />
