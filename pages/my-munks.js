@@ -130,7 +130,10 @@ export default function MyMunksPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={munkSelected.image}
+              src={munkSelected.image.replace(
+                "ipfs://",
+                "https://cloudflare-ipfs.com/ipfs/"
+              )}
               alt={munkSelected.name}
               className="w-2/4 mx-auto rounded-xl"
             />
