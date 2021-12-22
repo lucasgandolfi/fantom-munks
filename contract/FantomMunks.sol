@@ -19,7 +19,7 @@ contract FantomMunks is
 
     // Address to pay the mint and royalties
     address payable public depositAddress =
-        payable(0xFc3778f4b877B25A2A6B501a6Bd987bB6B43F7e0);
+        payable(0x254F9595cA1C2E567C51d5B44f0f43Cf485ef154);
 
     uint256 public maxMintable = 10000;
     uint256 public mintPrice = 1 ether;
