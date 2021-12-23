@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -24,7 +25,7 @@ contract FantomMunks is
     uint256 public maxMintable = 10000;
     uint256 public mintPrice = 1 ether;
 
-    string private baseUri = "https://fantom-munks-dev.vercel.app/api/munks/";
+    string private baseUri = "https://www.munksnft.com/api/munks/";
 
     uint256 public royaltiesPercentage = 7;
 
