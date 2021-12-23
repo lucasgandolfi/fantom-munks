@@ -85,7 +85,7 @@ export default function MyMunksPage() {
         <h1 className="text-xl sm:text-3xl mt-5 text-center font-extrabold text-white mb-4">
           My Munks
         </h1>
-        <ul className="grid grid-cols-4 gap-4">
+        <ul className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {userMunks.map((munk) => {
             if (!munk) return null;
             return (
