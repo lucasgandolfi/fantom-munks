@@ -1,9 +1,11 @@
 import { ethers } from "ethers";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import useMunks from "../hooks/useMunks";
 import useWeb3 from "../hooks/useWeb3";
 import { toast } from "react-toastify";
+import Button from "../components/Button";
 
 export default function MyMunksPage() {
   const { active, activate, deactivate, account, web3 } = useWeb3();
@@ -66,37 +68,21 @@ export default function MyMunksPage() {
     >
       <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
         <Link href="/">
-          <a className="text-3xl sm:text-5xl font-extrabold text-purple-800">
-            FANTOM MUNKS
-          </a>
+          <Image src="/assets/logo.png" width="400" height="65" />
         </Link>
 
-        <Link href="/my-munks">
-          <a className="transition-all duration-500 ease-in-out text-purple-600 hover:text-purple-800 transform hover:scale-110">
-            My Munks
-          </a>
-        </Link>
+        <Button path="/my-munks">My munks</Button>
 
-        {active ? (
-          <button
-            className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0 transform hover:scale-110"
-            onClick={() => deactivate()}
-          >
-            {account.substring(0, 6) +
+        <Button onClick={() => activate()}>
+          {active
+            ? account.substring(0, 6) +
               "..." +
-              account.substring(account.length - 4, account.length)}
-          </button>
-        ) : (
-          <button
-            className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0 transform hover:scale-110"
-            onClick={() => activate()}
-          >
-            Connect
-          </button>
-        )}
+              account.substring(account.length - 4, account.length)
+            : "Connect"}
+        </Button>
       </div>
       <div className="py-5">
-        <h1 className="text-xl sm:text-3xl mt-5 text-center font-extrabold text-purple-800">
+        <h1 className="text-xl sm:text-3xl mt-5 text-center font-extrabold text-white mb-4">
           My Munks
         </h1>
         <ul className="grid grid-cols-4 gap-4">
