@@ -13,3 +13,7 @@ body {
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;
 }
+
+#__next {
+  background-color: rgb(124, 58, 237)
+}

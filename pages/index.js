@@ -1,90 +1,68 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
-import { ToastContainer, toast } from "react-toastify";
+import Link from "next/link";
+import { toast } from "react-toastify";
 
-import Web3 from "web3";
 import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
-import "react-toastify/dist/ReactToastify.css";
+import useWeb3 from "../hooks/useWeb3";
+import { ethers } from "ethers";
+import Button from "../components/Button";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+const MINT_PRICE = Number(process.env.NEXT_PUBLIC_MINT_PRICE);
 
 function Index() {
-  const [web3, setWeb3] = useState(null);
-  const [address, setAddress] = useState(null);
+  const { active, activate, deactivate, account, web3 } = useWeb3();
+
   const [contract, setContract] = useState(null);
   const [maxMintable, setMaxMintable] = useState(0);
   const [supply, setSupply] = useState(0);
   const [isClaiming, setIsClaiming] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+
+  const [mintQuantity, setMintQuantity] = useState(0);
 
   useEffect(() => {
-    connectWallet();
+    activate();
   }, []);
 
-  function connectWallet() {
-    if (!window.ethereum) {
-      alert("Please install MetaMask");
-      setIsReady(false);
-      return;
-    }
+  useEffect(() => {
+    if (active && web3) {
+      let c = new ethers.Contract(
+        contractAddress,
+        FantomMunksAbi,
+        web3.getSigner(account)
+      );
 
-    ethereum
-      .request({ method: "eth_requestAccounts" })
-      .then((accounts) => {
-        setAddress(accounts[0]);
-        let w3 = new Web3(window.web3.currentProvider);
-        setWeb3(w3);
-        let c = new w3.eth.Contract(FantomMunksAbi, contractAddress);
-        setContract(c);
-
-        c.methods
-          .totalSupply()
-          .call()
-          .then((supply) => {
-            setIsReady(true);
-            setSupply(supply);
-          })
-          .catch((err) => {
-            setIsReady(false);
-            setAddress(null);
-            setSupply(0);
-            setMaxMintable(0);
-            setContract(null);
-            toast.error("Check if you are using Fantom Network", {
-              theme: "colored",
-            });
+      setContract(c);
+      c.totalSupply()
+        .then((supply) => {
+          setSupply(supply);
+        })
+        .catch((err) => {
+          setSupply(0);
+          setMaxMintable(0);
+          setContract(null);
+          toast.error("Check if you are using Fantom Network", {
+            theme: "colored",
           });
-
-        c.methods
-          .maxMintable()
-          .call()
-          .then((maxMintable) => {
-            setMaxMintable(maxMintable);
-          })
-          .catch((err) => console.log(err));
-      })
-      .catch((err) => {
-        setIsReady(false);
-        toast.error("Check if you are using Fantom Network", {
-          theme: "colored",
         });
-      });
-  }
 
-  function handleClaim() {
-    let tx = claim();
-    console.log(tx);
-  }
+      c.maxMintable()
+        .then((maxMintable) => {
+          setMaxMintable(maxMintable);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [active, web3]);
 
   async function loadData() {
-    let totalSupply = await contract.methods.totalSupply().call();
+    let totalSupply = await contract.totalSupply();
 
     setSupply(totalSupply);
 
-    contract.methods
+    contract
       .maxMintable()
-      .call()
       .then((maxMintable) => {
         setMaxMintable(maxMintable);
       })
@@ -92,107 +70,154 @@ function Index() {
   }
 
   function claim() {
-    setIsClaiming(true);
-    let _price = web3.utils.toWei("1");
+    if (account) {
+      setIsClaiming(true);
+      let _price = ethers.utils.parseUnits(
+        String(MINT_PRICE * mintQuantity),
+        18
+      );
 
-    const claimPromise = new Promise((resolve, reject) => {
-      contract.methods
-        .claim(1)
-        .send({
-          to: contractAddress,
-          from: address,
-          value: _price,
-        })
-        .once("error", (err) => {
-          console.log(err);
-          setIsClaiming(false);
-          reject();
-        })
-        .then((receipt) => {
-          console.log(receipt);
-          setIsClaiming(false);
-          loadData();
+      const claimPromise = new Promise((resolve, reject) => {
+        contract
+          .claim(mintQuantity, {
+            value: _price,
+          })
+          .then((receipt) => {
+            console.log(receipt);
+            setIsClaiming(false);
+            loadData();
 
-          const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
+            const link = `https://ftmscan.com/tx/${receipt.transactionHash}`;
 
-          resolve(link);
-        });
-    });
+            resolve(link);
+          })
+          .catch((err) => {
+            console.log("error", err);
+          });
+      });
 
-    toast.promise(claimPromise, {
-      pending: "Claiming...",
-      success: {
-        render: (link) => `Claimed!`,
-      },
-      error: "Something went wrong... Try again!",
-    });
+      toast.promise(claimPromise, {
+        pending: "Claiming...",
+        success: {
+          render: (link) => `Claimed!`,
+        },
+        error: "Something went wrong... Try again!",
+      });
+    }
   }
 
-  return (
-    <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen">
-      <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-purple-800">
-          FANTOM MUNKS
-        </h1>
+  const changeQuantity = (operation) => {
+    if (operation === "add") {
+      if (mintQuantity < maxMintable) {
+        setMintQuantity(mintQuantity + 1);
+      }
+    } else {
+      if (mintQuantity > 0) {
+        setMintQuantity(mintQuantity - 1);
+      }
+    }
+  };
 
-        <button
-          className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white sm:w-auto w-full mt-3 sm:mt-0"
-          onClick={connectWallet}
-        >
-          {isReady
-            ? address?.substring(0, 6) +
+  return (
+    <div className="px-5 sm:max-w-5xl mx-auto sm:h-screen flex flex-col justify-between">
+      <div className="py-3 flex sm:flex-row flex-col justify-between items-center">
+        <Link href="/">
+          <Image src="/assets/logo.png" width="400" height="65" />
+        </Link>
+
+        <Button path="/my-munks">My munks</Button>
+
+        <Button onClick={() => activate()}>
+          {active
+            ? account.substring(0, 6) +
               "..." +
-              address?.substring(address.length - 4, address.length)
-            : "Connect"}{" "}
-          {}
-        </button>
+              account.substring(account.length - 4, account.length)
+            : "Connect"}
+        </Button>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:justify-between mt-10 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden">
-        <div className="flex flex-col order-5 sm:order-1">
-          <div className="order-5 sm:order-1 mb-3">
-            <span className="font-bold text-lg">
-              This is the first collection created inside the{" "}
-              <span className="text-purple-800 font-bold">MUNKVERSE.</span>
-            </span>
-            <br />
-            <br />
-            What is the{" "}
-            <span className="text-purple-800 font-bold">MUNKVERSE</span>?
-            <br />
-            It's just where all Munks live.
-            <br />
-            Munk is a character created by 16 years old's mind around 2008.
-            <br />
-            I've never stopped drawing this same character.
-            <br />
-            Now I think it's perfect for NFTs.
-            <br />
-            I hope you stick around to see more.
-            <br />
-            <br />
-            This would not be possible without the amazing project:
-            <br />
-            <a
-              className="text-blue-600"
-              href="https://www.fantomchess.com"
-              target="_blank"
-            >
-              fantomchess.com
-            </a>
+      <div className="flex flex-col sm:flex-row sm:justify-between items-center mt-3 mb-10 sm:mb-0 overflow-y-scroll lg:overflow-y-hidden bg-white px-7 py-4 rounded-3xl">
+        <div className="flex flex-col order-5 sm:order-1 w-full sm:w-5/12">
+          <div className="flex flex-row justify-evenly mb-5 items-center">
+            <Image src="/assets/ancient-munks.png" width={55} height={60} />
+            <div className="px-2">
+              <h2 className="text-purple-600">An ancient legend says:</h2>
+              <h2 className="font-bold italic text-purple-600">
+                For every hand, a blade.
+              </h2>
+              <h2 className="font-bold italic text-purple-600">
+                For every existence, a path.
+              </h2>
+              <h2 className="font-bold italic text-purple-600">
+                Hold to prepare. Wait for the call.
+              </h2>
+            </div>
+            <Image src="/assets/ancient-munks.png" width={55} height={60} />
           </div>
 
-          {isReady ? (
-            <button
-              className="transition-all duration-500 ease-in-out h-10 order-1 sm:order-5 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white"
-              onClick={handleClaim}
-            >
-              {isClaiming ? "Claiming..." : "Claim (1 FTM)"}
-            </button>
-          ) : (
-            <div>
-              <br></br>Connect your wallet to claim
+          <div className="order-5 sm:order-1 mb-3 text-sm">
+            <p className="font-bold">
+              Welcome to the first collection inside the MUNKVERSE. <br />
+              This is your gateway to this amazing journey.
+              <br />
+              Claim your MUNK. Stay safe.
+            </p>
+            <br />
+            <p>
+              <span className="font-bold">Mint a MUNK:</span> get a profile-pic
+              with cool shapes and colors.
+              <br />
+              <span className="font-bold">Hold your MUNK:</span> get some cool
+              game-asset-like NFTs.
+              <br />
+              <span className="font-bold">Hold everything:</span> get a
+              strategy-game.
+            </p>
+          </div>
+
+          {active ? (
+            <div className="order-1 sm:order-5 flex flex-col items-center">
+              <div className="flex flex-row items-center justify-center w-10/12">
+                <button
+                  className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center"
+                  onClick={() => changeQuantity("subtract")}
+                >
+                  -
+                </button>
+                <input
+                  className="transition-all duration-500 ease-in-out hover:shadow-xl p-2 my-2 rounded-xl border-2 border-purple-600 mx-2"
+                  type="number"
+                  placeholder="Munks quantity"
+                  min="0"
+                  value={mintQuantity}
+                  onChange={(e) => setMintQuantity(e.target.value)}
+                />
+                <button
+                  className="transition-all duration-500 ease-in-out h-10 bg-purple-600 hover:bg-purple-800 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center"
+                  onClick={() => changeQuantity("add")}
+                >
+                  +
+                </button>
+              </div>
+              <button
+                className={[
+                  `${
+                    mintQuantity === 0
+                      ? "bg-gray-400 hover:bg-gray-600"
+                      : "bg-purple-600 hover:bg-purple-800"
+                  }`,
+                  "transition-all duration-500 ease-in-out h-10 hover:shadow-xl px-4 rounded-xl text-white transform hover:scale-110 hover:z-50 origin-center w-10/12",
+                ]}
+                disabled={mintQuantity === 0}
+                onClick={claim}
+              >
+                {isClaiming
+                  ? "Claiming..."
+                  : `Claim (${mintQuantity * MINT_PRICE} FTM)`}
+              </button>
             </div>
+          ) : (
+            <div>Connect your wallet to claim</div>
           )}
 
           <div className="flex flex-col sm:flex-row my-5 order-2 sm:order-6 justify-between">
@@ -205,7 +230,7 @@ function Index() {
               <span>Mint price</span>
             </div>
             <div className="flex flex-col py-2 sm:py-0 sm:pl-7">
-              {isReady && (
+              {active && (
                 <>
                   <span className="font-bold text-xl">
                     {maxMintable - supply}
@@ -217,13 +242,13 @@ function Index() {
           </div>
         </div>
 
-        <div className="order-1 sm:order-5">
+        <div className="order-1 sm:order-5 w-full sm:w-5/12">
           <div>
             <Image
               src="/assets/munk1.gif"
               alt="munk"
-              width="450"
-              height="450"
+              width="600"
+              height="600"
               className="rounded-xl shadow-xl"
             />
           </div>
@@ -231,24 +256,7 @@ function Index() {
           <br />
         </div>
       </div>
-      <footer className="flex flex-row align-center justify-center">
-        <a
-          href="https://twitter.com/munks_nft"
-          target="_blank"
-          className="mx-5"
-        >
-          <Image src="/assets/twitter.svg" alt="munk" width="20" height="20" />
-        </a>
-
-        <a
-          href={`https://ftmscan.com/address/${contractAddress}`}
-          className="mx-5"
-          target="_blank"
-        >
-          <Image src="/assets/fantom.svg" alt="munk" width="20" height="20" />
-        </a>
-      </footer>
-      <ToastContainer />
+      <div></div>
     </div>
   );
 }
