@@ -14,6 +14,6 @@ body {
     sans-serif;
 }
 
-#__next {
+body, #__next {
   background-color: rgb(124, 58, 237)
 }
