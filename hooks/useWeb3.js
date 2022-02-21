@@ -26,7 +26,19 @@ const useWeb3 = () => {
   };
 
   useEffect(() => {
-    setWeb3(new ethers.providers.Web3Provider(window.ethereum, "any"));
+    if (window.ethereum) {
+      setWeb3(new ethers.providers.Web3Provider(window.ethereum, "any"));
+    } else {
+      toast.error("Please install MetaMask", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "colored",
+      });
+    }
   }, []);
 
   return {
