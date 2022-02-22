@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import Head from "next/head";
 
+import { NextUIProvider } from "@nextui-org/react";
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 
@@ -14,12 +15,17 @@ function getLibrary(provider) {
 function MyApp({ Component, pageProps }) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <Head>
-        <title>Fantom Munks</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-      <Component {...pageProps} />
-      <ToastContainer />
+      <NextUIProvider>
+        <Head>
+          <title>Fantom Munks</title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </NextUIProvider>
     </Web3ReactProvider>
   );
 }
