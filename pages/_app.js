@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "../src/styles/globals.css";
 import Head from "next/head";
 
 import { NextUIProvider } from "@nextui-org/react";
@@ -7,6 +7,7 @@ import { Web3Provider } from "@ethersproject/providers";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import theme from "../src/themes";
 
 function getLibrary(provider) {
   return new Web3Provider(provider);
@@ -15,7 +16,7 @@ function getLibrary(provider) {
 function MyApp({ Component, pageProps }) {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <NextUIProvider>
+      <NextUIProvider theme={theme}>
         <Head>
           <title>Fantom Munks</title>
           <meta

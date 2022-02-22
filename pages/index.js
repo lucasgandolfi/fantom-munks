@@ -1,14 +1,14 @@
 import React, { useState, useEffect, Fragment } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { toast } from "react-toastify";
 
 import FantomMunksAbi from "../contract/abis/FantomMunks.json";
 
-import useWeb3 from "../hooks/useWeb3";
+import useWeb3 from "../src/hooks/useWeb3";
 import { ethers } from "ethers";
 import { Container, Grid, Text } from "@nextui-org/react";
-import CollectionCard from "../components/CollectionCard";
+import CollectionCard from "../src/components/CollectionCard";
+import Title from "../src/components/Title";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 const MINT_PRICE = Number(process.env.NEXT_PUBLIC_MINT_PRICE);
@@ -127,16 +127,7 @@ function Index() {
     >
       <Grid.Container gap={5}>
         <Grid xs={12} display="flex" justify="center">
-          <Text
-            h1
-            size={60}
-            css={{
-              textGradient: "45deg, $purple600 -20%, $pink500 100%",
-            }}
-            weight="bold"
-          >
-            MUNKVERSE
-          </Text>
+          <Title>MUNKVERSE</Title>
         </Grid>
         <Grid xs={12} display="flex" justify="center">
           <Grid.Container
@@ -163,6 +154,7 @@ function Index() {
               }}
             >
               <Text
+                size={24}
                 css={{
                   color: "$purple600",
                 }}
@@ -170,15 +162,16 @@ function Index() {
                 An ancient legend says:
               </Text>
               <Text
+                size={24}
                 css={{
                   color: "$purple600",
-                  style: "italic",
                 }}
                 weight="bold"
               >
                 For every hand, a blade.
               </Text>
               <Text
+                size={24}
                 css={{
                   color: "$purple600",
                 }}
@@ -187,6 +180,7 @@ function Index() {
                 For every existence, a path.
               </Text>
               <Text
+                size={24}
                 css={{
                   color: "$purple600",
                 }}
@@ -208,12 +202,17 @@ function Index() {
           </Grid.Container>
         </Grid>
         <Grid xs={6} display="flex" justify="center">
-          <CollectionCard src="/assets/munk1.gif" title="Fantom Munks" />
+          <CollectionCard
+            src="/assets/munk1.gif"
+            title="Fantom Munks"
+            href="/fantom-munks/"
+          />
         </Grid>
         <Grid xs={6} display="flex" justify="center">
           <CollectionCard
             src="/assets/swords1.gif"
             title="Golden Scarlet - Swords"
+            href="/golden-scarlet/swords/"
           />
         </Grid>
       </Grid.Container>

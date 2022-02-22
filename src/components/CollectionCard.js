@@ -1,8 +1,21 @@
 import { Card, Col, Row, Text } from "@nextui-org/react";
+import { useRouter } from "next/router";
 
-const CollectionCard = ({ title, src }) => {
+const CollectionCard = ({ title, src, href }) => {
+  const router = useRouter();
+
+  const onClick = () => {
+    router.push(href);
+  };
+
   return (
-    <Card cover hoverable clickable css={{ w: "100%", h: "400px", p: 0 }}>
+    <Card
+      cover
+      hoverable
+      clickable
+      onClick={onClick}
+      css={{ w: "100%", h: "400px", p: 0 }}
+    >
       <Card.Body>
         <Card.Image src={src} alt={title} width="100%" showSkeleton={false} />
       </Card.Body>
