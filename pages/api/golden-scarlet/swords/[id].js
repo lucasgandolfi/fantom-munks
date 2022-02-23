@@ -1,5 +1,5 @@
 import Cors from "cors";
-import FantomMunks from "../../../contract/abis/FantomMunks.json";
+import GoldenScarletSwords from "../../../../contract/abis/GoldenScarletSwords.json";
 import { ethers } from "ethers";
 
 export default async function handler(req, res) {
@@ -14,14 +14,14 @@ export default async function handler(req, res) {
     const web3 = new ethers.providers.JsonRpcProvider(
       process.env.NEXT_PUBLIC_NETWORK_RPC
     );
-    // Loading FantomMunks abi
+    // Loading GoldenScarletSwords abi
     const contract = new ethers.Contract(
       process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-      FantomMunks,
+      GoldenScarletSwords,
       web3
     );
 
-    // Check if munk has owner
+    // Check if sword has owner
     contract
       .ownerOf(id)
       .then(() => {
@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       })
       .catch(() => {
         res.status(404).json({
-          message: "Munk not found yet",
+          message: "Sword not found yet!",
         });
       });
   } catch (error) {

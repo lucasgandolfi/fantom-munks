@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 
-contract FantomMunks is
+contract SwordsGoldenScarlet is
     ERC721,
     ERC721Enumerable,
     Ownable,
@@ -22,38 +22,33 @@ contract FantomMunks is
     address payable public depositAddress =
         payable(0x254F9595cA1C2E567C51d5B44f0f43Cf485ef154);
 
-    uint256 public maxMintable = 10000;
-    uint256 public mintPrice = 1 ether;
-
-    string private baseUri = "https://www.munksnft.com/api/munks/";
+    string private baseUri = "https://www.munksnft.com/api/swords/";
 
     uint256 public royaltiesPercentage = 7;
 
-    constructor() ERC721("FantomMunks", "MNK") { }
+    constructor() ERC721("FantomMunks SWORDS - Golden Scarlet", "SWORDSGS") { }
 
     function _baseURI() internal view override returns (string memory) {
         return baseUri;
     }
 
-    function claim(uint256 quantity) public payable {
-        require(quantity > 0, "Invalid amount");
-        require(
-            (_tokenIdCounter.current() + quantity) < (maxMintable),
-            "No more Munks are available"
-        );
+    function claim() public payable {
+        require(false, "You cannot mint swords, sorry anom");
+    }
 
-        uint256 price = mintPrice * quantity;
+    function airdrop(uint256[] memory quantities, address[] memory receivers) public payable onlyOwner {
+        for (uint i=0; i < receivers.length; i++) {
+            uint256 quantity = quantities[i];
+            address receiver = receivers[i];
+            
+            require(quantity > 0, "Invalid amount");
 
-        require(msg.value >= price, "Invalid amount");
+            for (uint i = 0; i < quantity; i++) {
+                uint256 id = _tokenIdCounter.current();
+                _safeMint(receiver, id);
 
-        // transfer amount to depositAddress
-        depositAddress.transfer(price);
-
-        for (uint256 i = 0; i < quantity; i++) {
-            uint256 id = _tokenIdCounter.current();
-            _safeMint(msg.sender, id);
-
-            _tokenIdCounter.increment();
+                _tokenIdCounter.increment();
+            }
         }
     }
 
