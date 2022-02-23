@@ -9,6 +9,7 @@ import {
   Text,
   useTheme,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -17,6 +18,7 @@ import Title from "../../src/components/Title";
 
 const FantomMunks = () => {
   const { theme } = useTheme();
+  const router = useRouter();
 
   const [info, setInfo] = useState(null);
   const [mintModalVisible, setMintModalVisible] = useState(false);
@@ -25,21 +27,26 @@ const FantomMunks = () => {
     fetch("/api/munks/info")
       .then((res) => res.json())
       .then((data) => {
+        console.log("Data", data);
         setInfo({
-          munksToBeClaim: munksToClaim,
-          mintPrice,
-          munksAvailable,
+          munksToBeClaim: data.munksToClaim,
+          mintPrice: data.mintPrice,
+          munksAvailable: data.munksAvailable,
         });
       })
-      .catch(() => {
+      .catch((err) => {
         setInfo(null);
-        console.error("Erro ao buscar info");
+        console.error("Erro ao buscar info", err);
         toast.error("Something went wrong getting info about Munks...");
       });
   }, []);
 
   const openMintModal = () => {
     setMintModalVisible(true);
+  };
+
+  const openMunksGallery = () => {
+    router.push("/fantom-munks/gallery");
   };
 
   return (
@@ -129,6 +136,7 @@ const FantomMunks = () => {
                   <Text
                     weigth="bold"
                     css={{
+                      marginLeft: 10,
                       textGradient: "45deg, #13b5ec -20%, #0b30ff 100%",
                     }}
                   >
@@ -207,6 +215,34 @@ const FantomMunks = () => {
                   objectFit="cover"
                 />
               </div>
+            </Row>
+          </Col>
+        </Grid>
+        <Grid xs={12} justify="center">
+          <Col>
+            <Row justify="center">
+              <Text size={24} weight="bold">
+                Do you have
+              </Text>
+              <Text
+                size={24}
+                weight="bold"
+                css={{
+                  marginLeft: 10,
+                  marginRight: 5,
+                  textGradient: "45deg, $purple600 -20%, $pink500 100%",
+                }}
+              >
+                MUNKS
+              </Text>
+              <Text size={24} weight="bold">
+                ?
+              </Text>
+            </Row>
+            <Row justify="center" css={{ marginTop: 20, paddingBottom: 30 }}>
+              <Button shadow color="gradient" onClick={openMunksGallery}>
+                See my MUNKS
+              </Button>
             </Row>
           </Col>
         </Grid>
