@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import MintModal from "../../src/components/munks/MintModal";
 import Title from "../../src/components/Title";
 
@@ -33,6 +34,7 @@ const FantomMunks = () => {
       .catch(() => {
         setInfo(null);
         console.error("Erro ao buscar info");
+        toast.error("Something went wrong getting info about Munks...");
       });
   }, []);
 
