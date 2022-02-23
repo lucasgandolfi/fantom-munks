@@ -10,7 +10,7 @@ const useMunks = (web3, account) => {
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
-    if (web3) {
+    if (web3 && !(web3 instanceof Error)) {
       let c = new ethers.Contract(
         contractAddress,
         FantomMunksAbi,
