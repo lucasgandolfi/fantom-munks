@@ -70,7 +70,7 @@ const FantomMunksGallery = () => {
           userMunks.map((munk) => {
             if (!munk) return null;
             return (
-              <Grid key={munk.id}>
+              <Grid key={munk.id} xs={12} md={4} lg={3}>
                 <Card hoverable clickable width="100%" cover>
                   <Card.Header
                     css={{ position: "absolute", zIndex: 1, top: 5 }}

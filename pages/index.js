@@ -21,7 +21,7 @@ function Index() {
               width: "50%",
             }}
           >
-            <Grid xs={2} display="flex" alignItems="center">
+            <Grid xs={12} md={2} justify="center" alignItems="center">
               <div>
                 <Image
                   src="/assets/ancient-munks.png"
@@ -32,7 +32,8 @@ function Index() {
               </div>
             </Grid>
             <Grid
-              xs={8}
+              xs={12}
+              md={8}
               css={{
                 display: "flex",
                 flexDirection: "column",
@@ -75,7 +76,7 @@ function Index() {
                 Hold to prepare. Wait for the call.
               </Text>
             </Grid>
-            <Grid xs={2} display="flex" alignItems="center">
+            <Grid xs={12} md={2} justify="center" alignItems="center">
               <div>
                 <Image
                   src="/assets/ancient-munks.png"
@@ -87,14 +88,14 @@ function Index() {
             </Grid>
           </Grid.Container>
         </Grid>
-        <Grid xs={6} display="flex" justify="center">
+        <Grid xs={12} md={6} display="flex" justify="center">
           <CollectionCard
             src="/assets/munk1.gif"
             title="Fantom Munks"
             href="/fantom-munks/"
           />
         </Grid>
-        <Grid xs={6} display="flex" justify="center">
+        <Grid xs={12} md={6} display="flex" justify="center">
           <CollectionCard
             src="/assets/swords1.gif"
             title="Golden Scarlet - Swords"
