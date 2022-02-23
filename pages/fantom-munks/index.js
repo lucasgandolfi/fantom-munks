@@ -173,7 +173,7 @@ const FantomMunks = () => {
               </Row>
               {info !== null ? (
                 <Row>
-                  <Text>{info.munksAvailable}</Text>
+                  <Text>{info.munksToBeClaim - info.munksAvailable}</Text>
                 </Row>
               ) : (
                 <Row
