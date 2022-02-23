@@ -26,7 +26,12 @@ export default async function handler(req, res) {
       .ownerOf(id)
       .then(() => {
         // Fetch the munk metadata
-        fetch(`${process.env.METADATA_URL}/${id}.json`)
+        fetch(
+          `${process.env.METADATA_URL}/${id}.json`.replace(
+            "https://gateway.pinata.cloud/ipfs/",
+            "https://cloudflare-ipfs.com/ipfs/"
+          )
+        )
           .then((response) => response.json())
           .then((metadata) => {
             res.status(200).json(metadata);
