@@ -32,6 +32,7 @@ const ReadyToMint = ({
           <Row justify="center">
             <Text size={18}>So, do you want to mint some </Text>
             <Text
+              weight="bold"
               css={{
                 marginLeft: 5,
                 marginRight: 2,
@@ -88,6 +89,7 @@ const ReadyToMint = ({
                   {mintQuantity}
                 </Text>{" "}
                 <Text
+                  weight="bold"
                   css={{
                     marginLeft: 10,
                     textGradient: "45deg, $purple600 -20%, $pink500 100%",

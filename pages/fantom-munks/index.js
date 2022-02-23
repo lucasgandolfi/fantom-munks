@@ -42,19 +42,19 @@ const FantomMunks = () => {
             </Row>
             <Row css={{ marginTop: "$15" }}>
               <Col>
-                <Row css={{ flexDirection: "row" }}>
+                <Row justify="center" css={{ flexDirection: "row" }}>
                   <Text css={{ marginRight: 5 }} weight="bold">
                     Mint a MUNK:
                   </Text>
                   <Text>get a profile-pic with cool shapes and colors.</Text>
                 </Row>
-                <Row css={{ flexDirection: "row" }}>
+                <Row justify="center" css={{ flexDirection: "row" }}>
                   <Text css={{ marginRight: 5 }} weight="bold">
                     Hold your MUNK:
                   </Text>
                   <Text>get some cool game-asset-like NFTs.</Text>
                 </Row>
-                <Row css={{ flexDirection: "row" }}>
+                <Row justify="center" css={{ flexDirection: "row" }}>
                   <Text css={{ marginRight: 5 }} weight="bold">
                     Hold everything:
                   </Text>
