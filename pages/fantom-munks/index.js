@@ -1,21 +1,40 @@
 import {
   Button,
+  Card,
   Col,
   Container,
   Grid,
+  Loading,
   Row,
   Text,
   useTheme,
 } from "@nextui-org/react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MintModal from "../../src/components/munks/MintModal";
 import Title from "../../src/components/Title";
 
 const FantomMunks = () => {
   const { theme } = useTheme();
 
+  const [info, setInfo] = useState(null);
   const [mintModalVisible, setMintModalVisible] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/munks/info")
+      .then((res) => res.json())
+      .then((data) => {
+        setInfo({
+          munksToBeClaim: munksToClaim,
+          mintPrice,
+          munksAvailable,
+        });
+      })
+      .catch(() => {
+        setInfo(null);
+        console.error("Erro ao buscar info");
+      });
+  }, []);
 
   const openMintModal = () => {
     setMintModalVisible(true);
@@ -31,9 +50,9 @@ const FantomMunks = () => {
         <Grid xs={12} display="flex" justify="center">
           <Title withHomeLink>Fantom Munks</Title>
         </Grid>
-        <Grid xs={6}>
+        <Grid xs={12}>
           <Col>
-            <Row>
+            <Row justify="center">
               <Text size={18} css={{ textAlign: "center", letterSpacing: 1 }}>
                 Welcome to the first collection inside the MUNKVERSE. This is
                 your gateway to this amazing journey. Claim your MUNK. Stay
@@ -64,20 +83,103 @@ const FantomMunks = () => {
             </Row>
           </Col>
         </Grid>
+        <Grid xs={4}>
+          <Card color="default">
+            <Col>
+              <Row>
+                <Text
+                  weight="bold"
+                  css={{
+                    marginRight: 10,
+                    textGradient: "45deg, $purple600 -20%, $pink500 100%",
+                  }}
+                >
+                  MUNKS
+                </Text>{" "}
+                <Text>to be claim</Text>
+              </Row>
+              {info !== null ? (
+                <Row>
+                  <Text>{info.munksToBeClaim}</Text>
+                </Row>
+              ) : (
+                <Row
+                  justify="center"
+                  css={{
+                    marginTop: 20,
+                  }}
+                >
+                  <Loading type="points" color="white" size="sm" />
+                </Row>
+              )}
+            </Col>
+          </Card>
+        </Grid>
+        <Grid xs={4}>
+          <Card color="default">
+            <Col>
+              <Row>
+                <Text>Mint Price</Text>
+              </Row>
+              {info !== null ? (
+                <Row>
+                  <Text>{info.mintPrice}</Text>{" "}
+                  <Text
+                    weigth="bold"
+                    css={{
+                      textGradient: "45deg, #13b5ec -20%, #0b30ff 100%",
+                    }}
+                  >
+                    FTM
+                  </Text>
+                </Row>
+              ) : (
+                <Row
+                  justify="center"
+                  css={{
+                    marginTop: 20,
+                  }}
+                >
+                  <Loading type="points" color="white" size="sm" />
+                </Row>
+              )}
+            </Col>
+          </Card>
+        </Grid>
+        <Grid xs={4}>
+          <Card color="default">
+            <Col>
+              <Row>
+                <Text
+                  weight="bold"
+                  css={{
+                    marginRight: 10,
+                    textGradient: "45deg, $purple600 -20%, $pink500 100%",
+                  }}
+                >
+                  MUNKS
+                </Text>{" "}
+                <Text>available</Text>
+              </Row>
+              {info !== null ? (
+                <Row>
+                  <Text>{info.munksAvailable}</Text>
+                </Row>
+              ) : (
+                <Row
+                  justify="center"
+                  css={{
+                    marginTop: 20,
+                  }}
+                >
+                  <Loading type="points" color="white" size="sm" />
+                </Row>
+              )}
+            </Col>
+          </Card>
+        </Grid>
         <Grid xs={12} justify="center">
-          <div
-            style={{
-              borderRadius: theme.radii.base,
-              overflow: "hidden",
-            }}
-          >
-            <Image
-              src="/assets/munk1.gif"
-              alt="munks"
-              width="500"
-              height="500"
-              objectFit="cover"
-            />
+          <Col>
             <Row justify="center">
               <Text size={24} weight="bold">
                 Get your Munk!
@@ -88,7 +190,23 @@ const FantomMunks = () => {
                 Claim
               </Button>
             </Row>
-          </div>
+            <Row justify="center">
+              <div
+                style={{
+                  borderRadius: theme.radii.base,
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  src="/assets/munk1.gif"
+                  alt="munks"
+                  width="500"
+                  height="500"
+                  objectFit="cover"
+                />
+              </div>
+            </Row>
+          </Col>
         </Grid>
       </Grid.Container>
       <MintModal visible={mintModalVisible} setVisible={setMintModalVisible} />
