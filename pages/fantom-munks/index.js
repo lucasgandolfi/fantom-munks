@@ -8,10 +8,18 @@ import {
   useTheme,
 } from "@nextui-org/react";
 import Image from "next/image";
+import { useState } from "react";
+import MintModal from "../../src/components/munks/MintModal";
 import Title from "../../src/components/Title";
 
 const FantomMunks = () => {
   const { theme } = useTheme();
+
+  const [mintModalVisible, setMintModalVisible] = useState(false);
+
+  const openMintModal = () => {
+    setMintModalVisible(true);
+  };
 
   return (
     <Container
@@ -76,13 +84,14 @@ const FantomMunks = () => {
               </Text>
             </Row>
             <Row justify="center" css={{ marginTop: 20, paddingBottom: 30 }}>
-              <Button shadow color="gradient">
+              <Button shadow color="gradient" onClick={openMintModal}>
                 Claim
               </Button>
             </Row>
           </div>
         </Grid>
       </Grid.Container>
+      <MintModal visible={mintModalVisible} setVisible={setMintModalVisible} />
     </Container>
   );
 };

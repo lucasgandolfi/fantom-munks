@@ -15,8 +15,8 @@ function getLibrary(provider) {
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <NextUIProvider theme={theme}>
+    <NextUIProvider theme={theme}>
+      <Web3ReactProvider getLibrary={getLibrary}>
         <Head>
           <title>Fantom Munks</title>
           <meta
@@ -25,9 +25,9 @@ function MyApp({ Component, pageProps }) {
           />
         </Head>
         <Component {...pageProps} />
-        <ToastContainer />
-      </NextUIProvider>
-    </Web3ReactProvider>
+        <ToastContainer position="top-center" theme="dark" />
+      </Web3ReactProvider>
+    </NextUIProvider>
   );
 }
 
