@@ -1,11 +1,15 @@
-import { useWeb3React } from "@web3-react/core";
+import { UnsupportedChainIdError, useWeb3React } from "@web3-react/core";
 import { InjectedConnector } from "@web3-react/injected-connector";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 
+const CHAIN_ID = Number(process.env.NEXT_PUBLIC_CHAIN_ID);
+
 const injector = new InjectedConnector({
-  supportedChainIds: [Number(process.env.NEXT_PUBLIC_CHAIN_ID)],
+  supportedChainIds: [CHAIN_ID],
 });
+
+export class NoWalletInstalled extends Error {}
 
 const useWeb3 = () => {
   const [web3, setWeb3] = useState(null);
@@ -18,26 +22,14 @@ const useWeb3 = () => {
   } = useWeb3React();
 
   const activate = async () => {
-    try {
-      await web3Activate(injector);
-    } catch (err) {
-      console.error(err);
-    }
+    await web3Activate(injector, (err) => {}, true);
   };
 
   useEffect(() => {
     if (window.ethereum) {
       setWeb3(new ethers.providers.Web3Provider(window.ethereum, "any"));
     } else {
-      toast.error("Please install MetaMask", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-        theme: "colored",
-      });
+      setWeb3(new NoWalletInstalled());
     }
   }, []);
 

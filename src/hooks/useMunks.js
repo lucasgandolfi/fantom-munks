@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import { MINT_PRICE } from "../components/munks/MintModal";
 
-import FantomMunksAbi from "../contract/abis/FantomMunks.json";
+import FantomMunksAbi from "../../contract/abis/FantomMunks.json";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
@@ -9,7 +10,7 @@ const useMunks = (web3, account) => {
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
-    if (web3) {
+    if (web3 && !(web3 instanceof Error)) {
       let c = new ethers.Contract(
         contractAddress,
         FantomMunksAbi,
@@ -18,6 +19,17 @@ const useMunks = (web3, account) => {
       setContract(c);
     }
   }, [web3, account]);
+
+  const claim = async (quantity) => {
+    if (account && quantity > 0) {
+      const price = ethers.utils.parseUnits(String(MINT_PRICE * quantity));
+      const tx = await contract.claim(Number(quantity), {
+        value: price,
+      });
+      const receipt = await tx.wait();
+      return receipt.status;
+    }
+  };
 
   const getUserMunks = async () => {
     if (account) {
@@ -52,6 +64,7 @@ const useMunks = (web3, account) => {
 
   return {
     contract,
+    claim,
     getUserMunks,
     getMunkMetadata,
   };

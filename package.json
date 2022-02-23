@@ -11,6 +11,7 @@
   "dependencies": {
     "@ethereumjs/common": "^2.6.0",
     "@ethersproject/providers": "^5.5.0",
+    "@nextui-org/react": "^1.0.2-beta.4",
     "@web3-react/core": "^6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
     "cors": "^2.8.5",
@@ -19,14 +20,13 @@
     "next-images": "^1.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1",
     "react-toastify": "^8.1.0",
     "sweetalert2": "^11.1.9"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.0",
     "eslint": "^8.0.0",
-    "eslint-config-next": "11.1.2",
-    "postcss": "^8.4.1",
-    "tailwindcss": "^3.0.11"
+    "eslint-config-next": "11.1.2"
   }
 }
