@@ -92,7 +92,7 @@ const FantomMunks = () => {
             </Row>
           </Col>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={12} sm={4}>
           <Card color="default">
             <Col>
               <Row>
@@ -124,7 +124,7 @@ const FantomMunks = () => {
             </Col>
           </Card>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={12} sm={4}>
           <Card color="default">
             <Col>
               <Row>
@@ -156,7 +156,7 @@ const FantomMunks = () => {
             </Col>
           </Card>
         </Grid>
-        <Grid xs={4}>
+        <Grid xs={12} sm={4}>
           <Card color="default">
             <Col>
               <Row>
