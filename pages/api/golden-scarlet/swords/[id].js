@@ -37,7 +37,7 @@ export default async function handler(req, res) {
     const resp = await fetch(
       `${process.env.METADATA_URL_GOLDEN_SCARLET_SWORDS}/${id}.json`.replace(
         "https://gateway.pinata.cloud/ipfs/",
-        "https://cloudflare-ipfs.com/ipfs/"
+        "https://ipfs.io/ipfs/"
       )
     );
     const metadata = await resp.json();

@@ -111,10 +111,10 @@ const GSSwordsGallery = () => {
                   <Card.Image
                     src={token.image.replace(
                       "ipfs://",
-                      "https://cloudflare-ipfs.com/ipfs/"
+                      "https://ipfs.io/ipfs/"
                     )}
                     showSkeleton
-                    height={340}
+                    height={653}
                     width="100%"
                     alt={token.name}
                   />
