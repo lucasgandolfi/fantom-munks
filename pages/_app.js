@@ -8,12 +8,13 @@ import { Web3Provider } from "@ethersproject/providers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import theme from "../src/themes";
+import { motion } from "framer-motion";
 
 function getLibrary(provider) {
   return new Web3Provider(provider);
 }
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps, router }) {
   return (
     <NextUIProvider theme={theme}>
       <Web3ReactProvider getLibrary={getLibrary}>
@@ -24,7 +25,28 @@ function MyApp({ Component, pageProps }) {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
-        <Component {...pageProps} />
+        <motion.div
+          key={router.route}
+          initial="pageInitial"
+          animate="pageAnimate"
+          exit="pageExit"
+          variants={{
+            pageInitial: {
+              opacity: 0,
+              scale: 0.6,
+            },
+            pageAnimate: {
+              opacity: 1,
+              scale: 1,
+            },
+            pageExit: {
+              opacity: 0,
+              scale: 0.6,
+            },
+          }}
+        >
+          <Component {...pageProps} />
+        </motion.div>
         <ToastContainer position="top-center" theme="dark" />
       </Web3ReactProvider>
     </NextUIProvider>

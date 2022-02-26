@@ -1,4 +1,5 @@
 import { Col, Link, Row, Text } from "@nextui-org/react";
+import { default as NextLink } from "next/link";
 
 const Title = ({ children, withHomeLink }) => {
   return (
@@ -22,18 +23,20 @@ const Title = ({ children, withHomeLink }) => {
             top: -25,
           }}
         >
-          <Link href="/" size={14}>
-            <Text color="secondary">from </Text>
-            <Text
-              css={{
-                textGradient: "45deg, $purple600 -20%, $pink500 100%",
-                marginLeft: 5,
-              }}
-              weight="bold"
-            >
-              MUNKVERSE
-            </Text>
-          </Link>
+          <NextLink href="/">
+            <Link size={14}>
+              <Text color="secondary">from </Text>
+              <Text
+                css={{
+                  textGradient: "45deg, $purple600 -20%, $pink500 100%",
+                  marginLeft: 5,
+                }}
+                weight="bold"
+              >
+                MUNKVERSE
+              </Text>
+            </Link>
+          </NextLink>
         </Row>
       ) : null}
     </Col>
