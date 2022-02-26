@@ -54,6 +54,7 @@ const FantomMunksGallery = () => {
   };
   const closeModal = () => {
     setMunkSelected(null);
+    document.getElementsByTagName("body")[0].style.overflow = "auto";
   };
 
   return (
