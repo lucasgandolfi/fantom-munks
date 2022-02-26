@@ -59,6 +59,7 @@ const GSSwordsGallery = () => {
   };
   const closeModal = () => {
     setSelected(null);
+    document.getElementsByTagName("body")[0].style.overflow = "auto";
   };
 
   return (
